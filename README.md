@@ -15,26 +15,26 @@ Note, the Flask app is not thread safe, so, you can't send multiple audio files 
 
 1. Install Miniconda
 2. Create a conda environment.
-   
+
     ```bash
-    conda create -n whisper python=3.11.3 
-    ``` 
+    conda create -n whisper python=3.11.3
+    ```
 3. Activate the conda environment
-   
+
     ```bash
     conda activate whisper
     ```
 4. Install [openai-whisper](https://pypi.org/project/openai-whisper/)
-   
+
     ```bash
     pip install openai-whisper chardet flask requests
     ```
 
 ### Install CUDA/GPU accelerated version of PyTorch
 
-If you are running in Windows or Linux and you have an NVidia GPU then 
+If you are running in Windows or Linux and you have an NVidia GPU then
 
-1. Uninstall the version of torch installed when you installed openai-whisper. By default, openai-whisper library installs the CPU version of the PyTorch. 
+1. Uninstall the version of torch installed when you installed openai-whisper. By default, openai-whisper library installs the CPU version of the PyTorch.
 2. Follow the instructions to install `torch` with CUDA/GPU support, see installing [Pytorch](https://pytorch.org/get-started/locally/). At the time of writing, the Conda install command for the CUDA/GPU version of PyTorch is:
 
     ```bash
@@ -46,7 +46,11 @@ If you are running in Windows or Linux and you have an NVidia GPU then
 1. You can download the [latest release](https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip) from [FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds/releases).
 2. Unzip the downloaded FFmpeg file, move to your preferred app folder.
 3. From `System Properties`, select `Environment Variables`, and add the path to the FFmpeg bin folder to the path.
+4. Close existing `Terminal` windows, open a new `Terminal` window to load the updated environment path. Run the following command to test the installation of FFmpeg.
 
+    ```bash
+    ffmpeg -version
+    ```
 
 ## Run the OpenAI Whisper Flask Server
 
