@@ -4,12 +4,8 @@ import glob
 import PySimpleGUI as sg
 import requests
 import json
-from PIL import Image, ImageTk
-import io
 
 CUSTOM_VISION_ENDPOINT = "http://localhost:5000/transcribe"
-
-TRESHOLD = 0.8
 
 
 def parse_folder(path):
@@ -45,7 +41,7 @@ def main():
             sg.Text("Audio folder", font=font),
             sg.Input(size=(50, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from"),
-            sg.FolderBrowse(),
+            sg.FolderBrowse(font=("Arial", 12)),
         ],
         [
             [
@@ -56,7 +52,7 @@ def main():
                  size=(82, 25), auto_size_text=True)],
     ]
 
-    window = sg.Window("Azure Custom Vision Image Scoring",
+    window = sg.Window("OpenAI Whisper Audio Transcription",
                        elements, size=(1000, 700), icon='logo.ico')
     audio_files = []
     location = 0
