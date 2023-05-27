@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Drag and Drop File Upload</title>
+    <style>
+        /* Style the drop zone */
+        #drop_zone {
+            border: 2px dashed #bbb;
+            border-radius: 20px;
+            width: 480px;
+            height: 240px;
+            font-size: 32px;
+            line-height: 240px;
+            text-align: center;
+        }
+        /* Highlight the drop zone when hovered */
+        #drop_zone:hover {
+            border-color: #999;
+    
+        }
+    </style>
+</head>
+<body style="font-family:'tahoma'">
+    <h1>OpenAI Whisper Audio Transcriber</h1>
+    <p>Drag a file to the drop zone below and click the upload button.</p>
+    <div id="drop_zone">Drop files here</div>
+    <br>
+    <button id="upload_button">Upload</button>
+    <p id="status"></p>
+    <script>
+        // Get the elements
+        var dropZone = document.getElementById("drop_zone");
+        var uploadButton = document.getElementById("upload_button");
+        var status = document.getElementById("status");
+
+        // Initialize an empty array for the files
+        var files = [];
+
+        // Prevent default behavior for drag events
+        function preventDefault(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function update_status(msg){
+            document.getElementById('status').innerHTML = msg;
+        }
+
+        // Handle dropped files
+        function handleDrop(e) {
+            files = e.dataTransfer.files; // Get the files from the event object
+            update_status(files.length + " file(s) selected"); // Display the number of files selected
+        }
+
+        // Handle upload button click
+        function handleUpload(e) {
+            // Check if any files are selected
+            if (files.length === 0) {
+                update_status("No files selected.");
+                return;
+            }
+
+            if (files.length > 1) {
+                update_status("Please select only one file.");
+                files = [];
+                return;
+            }
+
+            if (files.length > 0) {
+                update_status("Processing")
+                // Create a new FormData object to send the files data
+                var formData = new FormData();
+                // Loop through the files array and append each file to the formData object
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("file", files[i], files[i].name);
+                }
+                // Create a new XMLHttpRequest object to send the request to the server
+                var xhr = new XMLHttpRequest();
+                // Set up the request method, url and headers
+                xhr.open("POST", "/upload");
+                xhr.setRequestHeader("Cache-Control", "no-cache");
+                // Set up a handler for when the request finishes
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        // The request was successful, show the response text
+                        update_status(xhr.responseText)
+                        // status.innerHTML = xhr.responseText;
+                        // document.getElementById('status').innerHTML = xhr.responseText;
+                    } else {
+                        // The request failed, show an error message
+                        update_status("Error uploading file");
+                    }
+                    // Clear the files array and reset the drop zone text
+                    files = [];
+                    dropZone.innerHTML = "Drop files here";
+                };
+                // Send the request with the formData object
+                xhr.send(formData);
+            } else {
+                // No files are selected, show an alert message
+                alert("Please select some files first");
+            }
+        }
+
+        // Add event listeners for drag and drop events on the drop zone element 
+        dropZone.addEventListener("dragenter", preventDefault, false);
+        dropZone.addEventListener("dragover", preventDefault, false);
+        dropZone.addEventListener("dragleave", preventDefault, false);
+        dropZone.addEventListener("drop", preventDefault, false);
+        dropZone.addEventListener("drop", handleDrop, false);
+
+        // Add event listener for click event on the upload button element 
+        uploadButton.addEventListener("click", handleUpload, false);
+    </script>
+</body>
+</html>
