@@ -5,7 +5,7 @@ import PySimpleGUI as sg
 import requests
 import json
 
-CUSTOM_VISION_ENDPOINT = "http://localhost:5000/transcribe"
+CUSTOM_VISION_ENDPOINT = "http://jumbo:5000/transcribe"
 
 
 def parse_folder(path):
@@ -38,25 +38,26 @@ def main():
     font = ("Arial", 14)
     elements = [
         [
-            sg.Text("Audio folder", font=font),
-            sg.Input(size=(50, 1), enable_events=True, key="-FILE-",
-                     font=font, tooltip="Select folder to load audio from"),
-            sg.FolderBrowse(font=("Arial", 12)),
+            sg.Text("Select folder", font=font),
+            sg.Input(size=(80, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from"),
+            sg.FolderBrowse(font=font),
         ],
         [
             [
                 sg.Text("Select file    ", font=font),
-                sg.Combo(key='-FILELIST-', size=(80, 20), enable_events=True, values=[], font=font, tooltip="Select audio file to transcribe", readonly=True)],
+                sg.Combo(key='-FILELIST-', size=(78, 20), enable_events=True, values=[],
+                         font=font, tooltip="Select audio file to transcribe", readonly=True),
+                sg.Button("Transcribe", font=font,
+                          tooltip="Transcribe selected audio file", key="-TRANSCRIBE-")
+            ],
+
         ],
-        [sg.Text(key="-TRANSCRIPTION-", font=("Arial", 16),
-                 size=(82, 25), auto_size_text=True)],
+        [sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(120, 40))],
     ]
 
     window = sg.Window("OpenAI Whisper Audio Transcription",
-                       elements, size=(1000, 700), icon='logo.ico')
+                       elements, size=(1000, 500), icon='logo.ico', auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
     audio_files = []
-    location = 0
-    ch = "No"
 
     while True:
         event, values = window.read()
@@ -66,11 +67,8 @@ def main():
             audio_files = parse_folder(values["-FILE-"])
             if audio_files:
                 window['-FILELIST-'].update(values=audio_files, set_to_index=0)
-        if event == '-FILELIST-':
-            ch = sg.popup_yes_no(
-                f"Do you want to transcribe {values['-FILELIST-']}?", title="Confirm Transcription")
-        if ch == "Yes":
-            window["-TRANSCRIPTION-"].update("Transcribing",
+        if event == '-TRANSCRIBE-':
+            window["-TRANSCRIPTION-"].update(f"Transcribing {values['-FILELIST-']}",
                                              text_color="black", background_color="white")
             window.refresh()
             load_audio(values['-FILELIST-'], window)
