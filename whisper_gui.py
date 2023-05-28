@@ -44,28 +44,27 @@ def main():
     '''Main function'''
     font = ("Arial", 14)
     button_font = ("Arial", 12)
+
     elements = [
         [
-            sg.Text("Select folder", font=font),
+            sg.FolderBrowse("Select audio folder", font=button_font , size=(20, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
-                     font=font, tooltip="Select folder to load audio from"),
-            sg.FolderBrowse(font=button_font),
+                     font=font, tooltip="Select folder to load audio from", )
         ],
         [
             [
-                sg.Text("Select file    ", font=font),
-                sg.Combo(key='-FILELIST-', size=(64, 20), enable_events=True, values=[],
+                sg.Button("Select file and transcribe", font=button_font, size=(20, 1),
+                          key="-TRANSCRIBE-"),
+                sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
-                sg.Button("Transcribe", font=button_font, key="-TRANSCRIBE-")
             ],
-
         ],
         [sg.Multiline(key="-TRANSCRIPTION-",
-                      font=("Arial", 16), size=(120, 40))],
+                      font=("Arial", 16), size=(85, 40))],
     ]
 
     window = sg.Window("OpenAI Whisper Audio Transcription",
-                       elements, size=(1000, 500), icon='logo.ico', auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
+                       elements, size=(800, 500), icon='logo.ico', auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
     audio_files = []
 
     while True:
