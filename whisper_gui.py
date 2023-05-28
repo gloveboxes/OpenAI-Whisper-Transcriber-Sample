@@ -47,17 +47,16 @@ def main():
     elements = [
         [
             sg.Text("Select folder", font=font),
-            sg.Input(size=(80, 1), enable_events=True, key="-FILE-",
+            sg.Input(size=(70, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from"),
             sg.FolderBrowse(font=button_font),
         ],
         [
             [
                 sg.Text("Select file    ", font=font),
-                sg.Combo(key='-FILELIST-', size=(78, 20), enable_events=True, values=[],
+                sg.Combo(key='-FILELIST-', size=(68, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
-                sg.Button("Transcribe", font=button_font,
-                          tooltip="Transcribe selected audio file", key="-TRANSCRIBE-")
+                sg.Button("Transcribe", font=button_font, key="-TRANSCRIBE-")
             ],
 
         ],
