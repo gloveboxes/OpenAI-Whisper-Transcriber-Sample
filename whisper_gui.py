@@ -47,7 +47,7 @@ def main():
     elements = [
         [
             sg.Text("Select folder", font=font),
-            sg.Input(size=(68, 1), enable_events=True, key="-FILE-",
+            sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from"),
             sg.FolderBrowse(font=button_font),
         ],
