@@ -35,11 +35,13 @@ def load_audio(path, window):
 
 
 def main():
+    '''Main function'''
     font = ("Arial", 14)
     elements = [
         [
             sg.Text("Select folder", font=font),
-            sg.Input(size=(80, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from"),
+            sg.Input(size=(80, 1), enable_events=True, key="-FILE-",
+                     font=font, tooltip="Select folder to load audio from"),
             sg.FolderBrowse(font=font),
         ],
         [
@@ -52,7 +54,8 @@ def main():
             ],
 
         ],
-        [sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(120, 40))],
+        [sg.Multiline(key="-TRANSCRIPTION-",
+                      font=("Arial", 16), size=(120, 40))],
     ]
 
     window = sg.Window("OpenAI Whisper Audio Transcription",
