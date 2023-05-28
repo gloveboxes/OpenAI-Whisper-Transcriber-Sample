@@ -1,55 +1,62 @@
-# image_browser.py
-
+'''gui to call the OpenAI Whisper Transcribe Server.'''
 import glob
+import json
 import PySimpleGUI as sg
 import requests
-import json
 
-CUSTOM_VISION_ENDPOINT = "http://jumbo:5000/transcribe"
+
+WHISPER_ENDPOINT = "http://jumbo:5000/transcribe"
 
 
 def parse_folder(path):
+    '''Parses the folder for audio files.'''
     images = glob.glob(f'{path}/*.mp3') + \
         glob.glob(f'{path}/*.wav') + glob.glob(f'{path}/*.m4a')
     return images
 
 
 def load_audio(path, window):
+    '''Loads the audio file and calls the OpenAI Whisper Transcribe.'''
+    text_color = "black"
 
     try:
         with open(path, 'rb') as img:
             image_raw = img.read()
 
-        r = requests.post(CUSTOM_VISION_ENDPOINT, data=image_raw, timeout=120)
+        result = requests.post(WHISPER_ENDPOINT, data=image_raw, timeout=120)
 
-        if r.status_code == 200:
-            result = json.loads(r.text)
+        if result.status_code == 200:
+            result = json.loads(result.text)
             if result:
-                text_color = "black"
+
                 text = (result["transcription"]).strip()
                 window["-TRANSCRIPTION-"].update(
                     text, text_color=text_color, background_color="white")
+        else:
+            window["-TRANSCRIPTION-"].update(result.text.encode(),
+                                             text_color=text_color, background_color="white")
 
-    except Exception as e:
-        print(e)
+    except Exception as exception:
+        print(exception)
 
 
 def main():
     '''Main function'''
     font = ("Arial", 14)
+    button_font = ("Arial", 12)
     elements = [
         [
             sg.Text("Select folder", font=font),
             sg.Input(size=(80, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from"),
-            sg.FolderBrowse(font=font),
+            sg.FolderBrowse(font=button_font),
         ],
         [
             [
                 sg.Text("Select file    ", font=font),
                 sg.Combo(key='-FILELIST-', size=(78, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
-                sg.Button("Transcribe", font=font,
+                sg.Button("Transcribe", font=button_font,
                           tooltip="Transcribe selected audio file", key="-TRANSCRIBE-")
             ],
 
