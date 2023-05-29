@@ -5,7 +5,7 @@ import json
 import requests
 
 PORT = 8000  # Change this as needed
-WHISPER_ENDPOINT = "http://jumbo:5000/transcribe"
+WHISPER_ENDPOINT = "http://localhost:5000/transcribe"
 
 
 class MyRequestHandler(SimpleHTTPRequestHandler):
