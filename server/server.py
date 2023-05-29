@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 
 # learn more about the models here: https://pypi.org/project/openai-whisper/
-model = whisper.load_model("large")
+model = whisper.load_model("medium")
 
 
 @app.route('/transcribe', methods=['POST'])
