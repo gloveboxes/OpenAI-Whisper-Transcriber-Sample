@@ -52,20 +52,20 @@ def main():
     elements = [
         [
             [
-                sg.Button("Set Whisper host address", font=button_font, size=(24, 1), key="-SET_HOST-"),
+                sg.Button("Update Whisper server address", font=button_font, size=(28, 1), key="-SET_HOST-"),
                 sg.Input(host_name, key="-WHISPER_ENDPOINT-",
                              font=font, size=(65, 1)),
             ],
         ],
         [
             sg.FolderBrowse("Select audio folder",
-                            font=button_font, size=(24, 1)),
+                            font=button_font, size=(28, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from", )
         ],
         [
             [
-                sg.Button("Transcribe", font=button_font, size=(24, 1),
+                sg.Button("Transcribe", font=button_font, size=(28, 1),
                           key="-TRANSCRIBE-"),
                 sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
