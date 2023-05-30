@@ -1,4 +1,5 @@
 '''gui to call the OpenAI Whisper Transcribe Server.'''
+import base64
 import glob
 import json
 import PySimpleGUI as sg
@@ -48,7 +49,8 @@ def main():
 
     elements = [
         [
-            sg.FolderBrowse("Select audio folder", font=button_font , size=(20, 1)),
+            sg.FolderBrowse("Select audio folder",
+                            font=button_font, size=(20, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from", )
         ],
@@ -61,12 +63,15 @@ def main():
             ],
         ],
         [sg.Multiline(key="-TRANSCRIPTION-",
-                      font=("Arial", 16), size=(85, 40))],
+                      font=("Arial", 16), size=(95, 30))],
     ]
 
-    logo = 'logo.ico' if platform.system() == 'Windows' else 'logo.icns'
-    window = sg.Window("OpenAI Whisper Audio Transcription",
-                       elements, size=(800, 500), icon=logo, auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
+    icon_base64 = base64.b64encode(open('icon.png', 'rb').read())
+    window = sg.Window(title="OpenAI Whisper Audio Transcription",
+                       layout=elements, icon=icon_base64,
+                       auto_size_text=True, auto_size_buttons=True,
+                       resizable=True, finalize=True)
+
     audio_files = []
 
     while True:
