@@ -4,10 +4,8 @@ import glob
 import json
 import PySimpleGUI as sg
 import requests
-import platform
 
-
-WHISPER_ENDPOINT = "http://localhost:5500/transcribe"
+host_name = "localhost"
 
 
 def parse_folder(path):
@@ -25,12 +23,14 @@ def load_audio(path, window):
         with open(path, 'rb') as img:
             image_raw = img.read()
 
-        result = requests.post(WHISPER_ENDPOINT, data=image_raw, timeout=120)
+        endpoint = window["-WHISPER_ENDPOINT-"].get()
+
+        result = requests.post(
+            f"http://{endpoint}:5500/transcribe", data=image_raw, timeout=120)
 
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
-
                 text = (result["transcription"]).strip()
                 window["-TRANSCRIPTION-"].update(
                     text, text_color=text_color, background_color="white")
@@ -39,7 +39,8 @@ def load_audio(path, window):
                                              text_color=text_color, background_color="white")
 
     except Exception as exception:
-        print(exception)
+        window["-TRANSCRIPTION-"].update(exception,
+                                         text_color=text_color, background_color="white")
 
 
 def main():
@@ -62,6 +63,13 @@ def main():
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
             ],
         ],
+        [
+            [
+                sg.Button("Whisper host name", font=button_font, size=(20, 1)),
+                sg.InputText(host_name, key="-WHISPER_ENDPOINT-",
+                             font=font, size=(65, 1)),
+            ],
+        ],
         [sg.Multiline(key="-TRANSCRIPTION-",
                       font=("Arial", 16), size=(95, 30))],
     ]
@@ -82,7 +90,7 @@ def main():
             audio_files = parse_folder(values["-FILE-"])
             if audio_files:
                 window['-FILELIST-'].update(values=audio_files, set_to_index=0)
-        if event == '-TRANSCRIBE-':
+        if event == '-TRANSCRIBE-' and values['-FILELIST-']:
             window["-TRANSCRIPTION-"].update(f"Transcribing {values['-FILELIST-']}",
                                              text_color="black", background_color="white")
             window.refresh()
