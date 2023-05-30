@@ -44,6 +44,7 @@ def load_audio(path, window):
 
 
 def main():
+    global host_name
     '''Main function'''
     font = ("Arial", 14)
     button_font = ("Arial", 12)
@@ -51,20 +52,20 @@ def main():
     elements = [
         [
             [
-                sg.Button("Set Whisper host name", font=button_font, size=(20, 1), key="-SET_HOST-"),
-                sg.InputText(host_name, key="-WHISPER_ENDPOINT-",
+                sg.Button("Set Whisper host address", font=button_font, size=(24, 1), key="-SET_HOST-"),
+                sg.Input(host_name, key="-WHISPER_ENDPOINT-",
                              font=font, size=(65, 1)),
             ],
         ],
         [
             sg.FolderBrowse("Select audio folder",
-                            font=button_font, size=(20, 1)),
+                            font=button_font, size=(24, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
                      font=font, tooltip="Select folder to load audio from", )
         ],
         [
             [
-                sg.Button("Transcribe", font=button_font, size=(20, 1),
+                sg.Button("Transcribe", font=button_font, size=(24, 1),
                           key="-TRANSCRIBE-"),
                 sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
@@ -99,7 +100,7 @@ def main():
             
         if event == "-SET_HOST-":
             # save the host name to a json config file
-            host_name = values["-SET_HOST-"]
+            host_name = values["-WHISPER_ENDPOINT-"]
             with open("config.json", "w") as config_file:
                 json.dump({"host_name": host_name}, config_file)
                 
