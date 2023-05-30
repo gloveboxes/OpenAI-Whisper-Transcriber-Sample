@@ -82,7 +82,7 @@ def main():
             ],
         ],
         [sg.Multiline(key="-TRANSCRIPTION-",
-                      font=("Arial", 16), size=(95, 30))],
+                      font=("Arial", 16), size=(95, 15))],
     ]
 
     icon_base64 = base64.b64encode(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'icon.png'), 'rb').read())
