@@ -13,6 +13,8 @@ Note, the Flask app is not thread safe, so, you can't send multiple audio files 
 
 ## Installing the GUI client perquisites
 
+![](media/openai_whisper_gui.png)
+
 To run the OpenAI Whisper Client app, you need to install the required Python Libraries and Tkinker.
 
 ### Install the Python Client libraries
