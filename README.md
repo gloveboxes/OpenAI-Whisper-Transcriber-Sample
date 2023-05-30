@@ -38,6 +38,10 @@ apt-get install python-tk
 brew install python-tk
 ```
 
+## Install the and run the Web Client
+
+![](./media/openai_whisper_web.png)
+
 
 ### Install prerequisites
 
