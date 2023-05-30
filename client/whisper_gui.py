@@ -3,6 +3,7 @@ import glob
 import json
 import PySimpleGUI as sg
 import requests
+import platform
 
 
 WHISPER_ENDPOINT = "http://localhost:5500/transcribe"
@@ -63,8 +64,9 @@ def main():
                       font=("Arial", 16), size=(85, 40))],
     ]
 
+    logo = 'logo.ico' if platform.system() == 'Windows' else 'logo.icns'
     window = sg.Window("OpenAI Whisper Audio Transcription",
-                       elements, size=(800, 500), icon='logo.ico', auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
+                       elements, size=(800, 500), icon=logo, auto_size_text=True, auto_size_buttons=True, resizable=True, finalize=True)
     audio_files = []
 
     while True:

@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "server/server.py",
+            "program": "client/whisper_gui.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["-m", "tiny"]
