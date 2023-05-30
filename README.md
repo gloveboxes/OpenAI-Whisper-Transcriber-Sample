@@ -11,6 +11,32 @@ Note, the Flask app is not thread safe, so, you can't send multiple audio files 
 1. See the `Setup` section of the [OpenAI Whisper Project Description](https://pypi.org/project/openai-whisper/) page.
 1. At the time of writing, May 2023, I used Python 3.11.3 and PyTorch 11.7 and the project worked as expected.
 
+## Installing the GUI client perquisites
+
+To run the OpenAI Whisper Client app, you need to install the required Python Libraries and Tkinker.
+
+### Install the Python Client libraries
+
+1. From the command line, navigate to the `client` folder.
+2. Run the following command to install the required Python libraries.
+   
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+### Installing Tkinker on Linux
+
+```bash
+apt-get install python-tk
+```
+
+### Installing Tkinker on macOS
+
+```bash
+brew install python-tk
+```
+
+
 ### Install prerequisites
 
 1. Install Miniconda
