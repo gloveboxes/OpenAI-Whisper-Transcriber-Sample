@@ -51,8 +51,7 @@ def main():
     elements = [
         [
             [
-                sg.Button("Whisper host name", font=button_font,
-                          size=(20, 1), disabled=True),
+                sg.Button("Set Whisper host name", font=button_font, size=(20, 1), key="-SET_HOST-"),
                 sg.InputText(host_name, key="-WHISPER_ENDPOINT-",
                              font=font, size=(65, 1)),
             ],
@@ -97,9 +96,23 @@ def main():
             window.refresh()
             load_audio(values['-FILELIST-'], window)
             ch = "No"
-
+            
+        if event == "-SET_HOST-":
+            # save the host name to a json config file
+            host_name = values["-WHISPER_ENDPOINT-"]
+            with open("config.json", "w") as config_file:
+                json.dump({"host_name": host_name}, config_file)
+                
     window.close()
 
 
 if __name__ == "__main__":
+    
+    # load the host name from a json config file
+    try:
+        with open("config.json", "r") as config_file:
+            host_name = json.load(config_file)["host_name"]
+    except:
+        pass
+    
     main()
