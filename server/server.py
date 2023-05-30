@@ -4,11 +4,9 @@ from flask import Flask, request, jsonify
 import whisper
 import random
 import os
+import argparse
 
 app = Flask(__name__)
-
-# learn more about the models here: https://pypi.org/project/openai-whisper/
-model = whisper.load_model("medium")
 
 
 @app.route('/transcribe', methods=['POST'])
@@ -32,4 +30,14 @@ def transcribe_audio():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--model")
+    args = parser.parse_args()
+
+    # learn more about the models here: https://github.com/openai/whisper/blob/main/model-card.md
+    # https://pypi.org/project/openai-whisper/
+    
+    model = args.model if args.model else "medium"
+    model = whisper.load_model(model)
+
     app.run(host='0.0.0.0')

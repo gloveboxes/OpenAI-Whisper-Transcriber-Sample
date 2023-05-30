@@ -8,9 +8,10 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "simpleweb.py",
+            "program": "server/server.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "args": ["-m", "tiny"]
         }
     ]
 }
