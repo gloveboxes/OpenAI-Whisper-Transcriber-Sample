@@ -65,7 +65,8 @@ def main():
         ],
         [
             [
-                sg.Button("Whisper host name", font=button_font, size=(20, 1)),
+                sg.Button("Whisper host name", font=button_font,
+                          size=(20, 1), disabled=True),
                 sg.InputText(host_name, key="-WHISPER_ENDPOINT-",
                              font=font, size=(65, 1)),
             ],
