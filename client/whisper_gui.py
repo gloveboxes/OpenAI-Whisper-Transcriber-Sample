@@ -99,7 +99,7 @@ def main():
             
         if event == "-SET_HOST-":
             # save the host name to a json config file
-            host_name = values["-WHISPER_ENDPOINT-"]
+            host_name = values["-SET_HOST-"]
             with open("config.json", "w") as config_file:
                 json.dump({"host_name": host_name}, config_file)
                 
