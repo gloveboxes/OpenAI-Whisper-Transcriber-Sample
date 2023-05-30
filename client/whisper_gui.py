@@ -4,6 +4,7 @@ import glob
 import json
 import PySimpleGUI as sg
 import requests
+import os
 
 host_name = "localhost"
 
@@ -84,7 +85,7 @@ def main():
                       font=("Arial", 16), size=(95, 30))],
     ]
 
-    icon_base64 = base64.b64encode(open('icon.png', 'rb').read())
+    icon_base64 = base64.b64encode(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'icon.png'), 'rb').read())
     window = sg.Window(title="OpenAI Whisper Audio Transcription",
                        layout=elements, icon=icon_base64,
                        auto_size_text=True, auto_size_buttons=True,
