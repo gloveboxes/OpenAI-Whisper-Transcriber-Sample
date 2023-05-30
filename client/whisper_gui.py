@@ -56,7 +56,7 @@ def main():
         ],
         [
             [
-                sg.Button("Select file and transcribe", font=button_font, size=(20, 1),
+                sg.Button("Transcribe", font=button_font, size=(20, 1),
                           key="-TRANSCRIBE-"),
                 sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[],
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
