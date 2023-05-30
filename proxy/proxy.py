@@ -12,12 +12,12 @@ def transcribe_audio():
     try:
         # post request to the relay server
         response = requests.post(
-            'http://localhost:5000/transcribe', data=request.data)
+            'http://localhost:5500/transcribe', data=request.data, timeout=300)
         return response.text, 200
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    except Exception as exception:
+        return jsonify({'error': str(exception)}), 500
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5500)

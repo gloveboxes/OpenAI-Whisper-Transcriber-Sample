@@ -40,4 +40,4 @@ if __name__ == '__main__':
     model = args.model if args.model else "medium"
     model = whisper.load_model(model)
 
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5500)

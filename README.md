@@ -66,8 +66,8 @@ Make a note of the IP addresses and the port number the server starts on. For ex
 
 ```text
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://192.168.1.83:5000
+ * Running on http://127.0.0.1:5500
+ * Running on http://192.168.1.83:5500
 ```
 
 ## Send an audio file to the Flask Server
@@ -76,7 +76,7 @@ The easiest way is with [Postman](https://www.postman.com/).
 
 1. Create a new HTTP request
 2. Select `POST`
-3. Enter the endpoint of your flask server. Eg, `http://127.0.0.1:5000/transcribe`
+3. Enter the endpoint of your flask server. Eg, `http://127.0.0.1:5500/transcribe`
 4. Select `Body`, then select `binary`
 5. Select the audio file you wish to transcribe
 6. Select `Send`

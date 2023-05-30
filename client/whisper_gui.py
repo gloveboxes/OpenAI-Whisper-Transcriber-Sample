@@ -5,7 +5,7 @@ import PySimpleGUI as sg
 import requests
 
 
-WHISPER_ENDPOINT = "http://localhost:5000/transcribe"
+WHISPER_ENDPOINT = "http://localhost:5500/transcribe"
 
 
 def parse_folder(path):
