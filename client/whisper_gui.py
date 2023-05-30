@@ -1,7 +1,7 @@
 '''gui to call the OpenAI Whisper Transcribe Server.'''
 
 # https://pyinstaller.org/en/stable/runtime-information.html
-# pyinstaller --onefile --add-data='icon.png:.' --distpath prebuilt whisper_gui.py
+# pyinstaller --onefile --add-data='icon.png:.' --distpath='prebuilt' --icon='icon.icns' -n='whisper_gui_macos_arm64' whisper_gui.py
 
 import glob
 import json
@@ -12,6 +12,7 @@ import requests
 
 
 HOST_ADDRESS = "localhost"
+bundle_dir = path.abspath(path.dirname(__file__))
 
 
 def parse_folder(audio_path):
@@ -91,7 +92,7 @@ def main(host_address):
                       font=("Arial", 16), size=(95, 15))],
     ]
 
-    bundle_dir = path.abspath(path.dirname(__file__))
+
     path_to_dat = path.join(bundle_dir, 'icon.png')
     icon_base64 = base64.b64encode(open(path_to_dat, 'rb').read())
 
@@ -121,8 +122,8 @@ def main(host_address):
         if event == "-SET_HOST-":
             # save the host name to a json config file
             host_address = values["-WHISPER_ENDPOINT-"]
-            with open("config.json", "w", encoding='UTF-8') as config_file:
-                json.dump({"host_name": host_address}, config_file)
+            with open("config.json", "w", encoding='UTF-8') as config:
+                json.dump({"host_name": host_address}, config)
 
     window.close()
 
