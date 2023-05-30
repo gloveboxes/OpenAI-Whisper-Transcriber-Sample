@@ -20,6 +20,10 @@ def load_audio(path, window):
     text_color = "black"
 
     try:
+        # disable the transcribe button
+        window["-TRANSCRIBE-"].update(disabled=True)
+        window.refresh()
+        
         with open(path, 'rb') as img:
             image_raw = img.read()
 
@@ -41,6 +45,11 @@ def load_audio(path, window):
     except Exception as exception:
         window["-TRANSCRIPTION-"].update(exception,
                                          text_color=text_color, background_color="white")
+        
+    finally:
+        # enable the transcribe button
+        window["-TRANSCRIBE-"].update(disabled=False)
+        window.refresh()
 
 
 def main():
