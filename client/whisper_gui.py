@@ -1,16 +1,19 @@
 '''gui to call the OpenAI Whisper Transcribe Server.'''
 
-# https://pyinstaller.org/en/stable/runtime-information.html
-# pyinstaller --onefile --add-data='icon.png:.' --distpath='prebuilt' --icon='icon.icns' -n='whisper_gui_macos_arm64' whisper_gui.py
-
+from threading import Thread
 import glob
 import json
 import base64
 from os import path
+import wave
+import io
+import pydub
+import pyaudio
 import PySimpleGUI as sg
 import requests
 
 
+STOP_RECORDING = False
 HOST_ADDRESS = "localhost"
 bundle_dir = path.abspath(path.dirname(__file__))
 
@@ -20,6 +23,81 @@ def parse_folder(audio_path):
     images = glob.glob(f'{audio_path}/*.mp3') + \
         glob.glob(f'{audio_path}/*.wav') + glob.glob(f'{audio_path}/*.m4a')
     return images
+
+
+def capture_audio(seconds, window):
+    '''Captures audio from the microphone and convert to in memory mp3 file.'''
+    chunk = 1024  # Record in chunks of 1024 samples
+    sample_format = pyaudio.paInt16  # 16 bits per sample
+    channels = 1
+    fs = 44100  # Record at 44100 samples per second
+
+    window.write_event_value('-RECORD_BUTTON_THREAD-', "Recording...")
+
+    p = pyaudio.PyAudio()  # Create an interface to PortAudio
+
+    print('Recording')
+
+    stream = p.open(format=sample_format,
+                    channels=channels,
+                    rate=fs,
+                    frames_per_buffer=chunk,
+                    input=True)
+
+    frames = []  # Initialize array to store frames
+
+    # for i in range(0, int(fs / chunk * seconds)):
+    max_seconds = int(fs / chunk * seconds)
+    chunks = 0
+
+    while not STOP_RECORDING and chunks < max_seconds:
+        data = stream.read(chunk)
+        frames.append(data)
+        chunks += 1
+
+    # Stop and close the stream
+    stream.stop_stream()
+    stream.close()
+    # Terminate the PortAudio interface
+    p.terminate()
+
+    # create an in-memory output file
+    in_memory_output_file_wav = io.BytesIO()
+
+    # Save the recorded data as a WAV file
+    wf = wave.open(in_memory_output_file_wav, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(p.get_sample_size(sample_format))
+    wf.setframerate(fs)
+    wf.writeframes(b''.join(frames))
+
+    in_memory_output_file_wav.seek(0)
+
+    # Convert WAV to MP3
+    audio = pydub.AudioSegment.from_wav(in_memory_output_file_wav)
+
+    in_memory_output_file_mp3 = io.BytesIO()
+    audio.export(in_memory_output_file_mp3, format="mp3")
+    in_memory_output_file_mp3.seek(0)
+
+    try:
+        window.write_event_value('-RECORD_BUTTON_THREAD-', "Transcribing...")
+        endpoint = window["-WHISPER_ENDPOINT-"].get()
+
+        result = requests.post(
+            f"http://{endpoint}:5500/transcribe", data=in_memory_output_file_mp3, timeout=120)
+        if result.status_code == 200:
+            result = json.loads(result.text)
+            if result:
+                text = (result["transcription"]).strip()
+                window.write_event_value("-TRANSCRIBE_THREAD-", text)
+        else:
+            window.write_event_value(
+                "-TRANSCRIBE_THREAD-", result.text.encode())
+    except Exception as exception:
+        window.write_event_value("-TRANSCRIBE_THREAD-", exception)
+
+    window.write_event_value('-RECORD_BUTTON_THREAD-', "Capture audio")
 
 
 def load_audio(audio_path, window):
@@ -61,6 +139,7 @@ def load_audio(audio_path, window):
 
 def main(host_address):
     '''Main function'''
+    global STOP_RECORDING
 
     font = ("Arial", 14)
     button_font = ("Arial", 12)
@@ -88,10 +167,19 @@ def main(host_address):
                          font=font, tooltip="Select audio file to transcribe", readonly=True),
             ],
         ],
+        [
+            [
+                sg.Button("Capture audio", font=button_font,
+                          size=(28, 1), key="-CAPTURE-"),
+                sg.Button("Stop recording", font=button_font,
+                          size=(28, 1), key="-STOP_RECORDING-", disabled=True),
+                sg.Text("Duration (seconds):", font=font),
+                sg.Input(60, size=(20, 1), key="-CAPTURE_DURATION-", font=font),
+            ]
+        ],
         [sg.Multiline(key="-TRANSCRIPTION-",
                       font=("Arial", 16), size=(95, 15))],
     ]
-
 
     path_to_dat = path.join(bundle_dir, 'icon.png')
     icon_base64 = base64.b64encode(open(path_to_dat, 'rb').read())
@@ -119,6 +207,36 @@ def main(host_address):
             window.refresh()
             load_audio(values['-FILELIST-'], window)
 
+        if event == "-CAPTURE-":
+            try:
+                duration = int(values["-CAPTURE_DURATION-"])
+            except ValueError:
+                duration = 60
+
+            window["-STOP_RECORDING-"].update(disabled=False)
+            window["-TRANSCRIPTION-"].update("", text_color="black",
+                                             background_color="white")
+            window.refresh()
+
+            STOP_RECORDING = False
+            thread = Thread(target=capture_audio, args=(duration, window))
+            thread.start()
+            # capture_audio(duration, window)
+
+        if event == "-STOP_RECORDING-":
+            STOP_RECORDING = True
+
+        if event == "-RECORD_BUTTON_THREAD-":
+            window["-CAPTURE-"].update(values[event], disabled=True)
+            if values[event] == "Capture audio":
+                window["-CAPTURE-"].update(disabled=False)
+            if values[event] == "Transcribing...":
+                window["-STOP_RECORDING-"].update(disabled=True)
+
+        if event == "-TRANSCRIBE_THREAD-":
+            window["-TRANSCRIPTION-"].update(values[event],
+                                             text_color="black", background_color="white")
+
         if event == "-SET_HOST-":
             # save the host name to a json config file
             host_address = values["-WHISPER_ENDPOINT-"]
@@ -135,7 +253,7 @@ if __name__ == "__main__":
         try:
             with open("config.json", "r", encoding='UTF-8') as config_file:
                 HOST_ADDRESS = json.load(config_file)["host_name"]
-        except:
-            pass
+        except Exception:
+            HOST_ADDRESS = "localhost"
 
     main(host_address=HOST_ADDRESS)
