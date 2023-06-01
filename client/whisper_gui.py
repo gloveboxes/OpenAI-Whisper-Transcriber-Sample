@@ -20,9 +20,9 @@ bundle_dir = path.abspath(path.dirname(__file__))
 
 def parse_folder(audio_path):
     '''Parses the folder for audio files.'''
-    images = glob.glob(f'{audio_path}/*.mp3') + \
+    audio_files = glob.glob(f'{audio_path}/*.mp3') + \
         glob.glob(f'{audio_path}/*.wav') + glob.glob(f'{audio_path}/*.m4a')
-    return images
+    return audio_files
 
 
 def capture_audio(seconds, window):
@@ -30,22 +30,22 @@ def capture_audio(seconds, window):
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
     channels = 1
-    fs = 44100  # Record at 44100 samples per second
+    sample_rate = 44100  # Record at 44100 samples per second
 
     window.write_event_value('-RECORD_BUTTON_THREAD-', "Recording...")
 
-    p = pyaudio.PyAudio()  # Create an interface to PortAudio
+    py_audio = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    stream = p.open(format=sample_format,
+    stream = py_audio.open(format=sample_format,
                     channels=channels,
-                    rate=fs,
+                    rate=sample_rate,
                     frames_per_buffer=chunk,
                     input=True)
 
     frames = []  # Initialize array to store frames
 
     # for i in range(0, int(fs / chunk * seconds)):
-    max_seconds = int(fs / chunk * seconds)
+    max_seconds = int(sample_rate / chunk * seconds)
     chunks = 0
 
     while not STOP_RECORDING and chunks < max_seconds:
@@ -57,7 +57,7 @@ def capture_audio(seconds, window):
     stream.stop_stream()
     stream.close()
     # Terminate the PortAudio interface
-    p.terminate()
+    py_audio.terminate()
 
     # create an in-memory output file
     in_memory_output_file_wav = io.BytesIO()
@@ -65,8 +65,8 @@ def capture_audio(seconds, window):
     # Save the recorded data as a WAV file
     wf = wave.open(in_memory_output_file_wav, 'wb')
     wf.setnchannels(channels)
-    wf.setsampwidth(p.get_sample_size(sample_format))
-    wf.setframerate(fs)
+    wf.setsampwidth(py_audio.get_sample_size(sample_format))
+    wf.setframerate(sample_rate)
     wf.writeframes(b''.join(frames))
 
     in_memory_output_file_wav.seek(0)
@@ -90,12 +90,11 @@ def capture_audio(seconds, window):
                 text = (result["transcription"]).strip()
                 window.write_event_value("-TRANSCRIBE_THREAD-", text)
         else:
-            window.write_event_value(
-                "-TRANSCRIBE_THREAD-", result.text.encode())
+            window.write_event_value("-TRANSCRIBE_THREAD-", result.text.encode())
     except Exception as exception:
         window.write_event_value("-TRANSCRIBE_THREAD-", exception)
-
-    window.write_event_value('-RECORD_BUTTON_THREAD-', "Capture audio")
+    finally:
+        window.write_event_value('-RECORD_BUTTON_THREAD-', "Capture audio")
 
 
 def load_audio(audio_path, window):
@@ -142,41 +141,34 @@ def main(host_address):
     font = ("Arial", 14)
     button_font = ("Arial", 12)
 
+    prerecorded_frame = [
+        [
+            sg.Button("Update Whisper server address", font=button_font, size=(28, 1), key="-SET_HOST-"),
+            sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, size=(65, 1), expand_x=True),
+        ],
+        [
+            sg.FolderBrowse("Select audio folder", font=button_font, size=(28, 1)),
+            sg.Input(size=(65, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from", expand_x=True)
+        ],
+        [
+            sg.Button("Transcribe", font=button_font, size=(28, 1), key="-TRANSCRIBE-"),
+            sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[], font=font, tooltip="Select audio file to transcribe", readonly=True, expand_x=True),
+        ],
+    ]
+
+    record_frame = [
+        [
+            sg.Button("Capture audio", font=button_font, size=(28, 1), key="-CAPTURE-"),
+            sg.Button("Stop recording", font=button_font, size=(28, 1), key="-STOP_RECORDING-", disabled=True),
+            sg.Text("Duration (seconds):", font=font, size=(16, 1)),
+            sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font, expand_x=True),
+        ]
+    ]
+
     elements = [
-        [
-            [
-                sg.Button("Update Whisper server address",
-                          font=button_font, size=(28, 1), key="-SET_HOST-"),
-                sg.Input(host_address, key="-WHISPER_ENDPOINT-",
-                         font=font, size=(65, 1)),
-            ],
-        ],
-        [
-            sg.FolderBrowse("Select audio folder",
-                            font=button_font, size=(28, 1)),
-            sg.Input(size=(65, 1), enable_events=True, key="-FILE-",
-                     font=font, tooltip="Select folder to load audio from", )
-        ],
-        [
-            [
-                sg.Button("Transcribe", font=button_font, size=(28, 1),
-                          key="-TRANSCRIBE-"),
-                sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[],
-                         font=font, tooltip="Select audio file to transcribe", readonly=True),
-            ],
-        ],
-        [
-            [
-                sg.Button("Capture audio", font=button_font,
-                          size=(28, 1), key="-CAPTURE-"),
-                sg.Button("Stop recording", font=button_font,
-                          size=(28, 1), key="-STOP_RECORDING-", disabled=True),
-                sg.Text("Duration (seconds):", font=font, size=(16, 1)),
-                sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font),
-            ]
-        ],
-        [sg.Multiline(key="-TRANSCRIPTION-",
-                      font=("Arial", 16), size=(95, 15))],
+        [sg.Frame('Pre-recorded audio', font=button_font, layout=prerecorded_frame, expand_x=True)],
+        [sg.Frame('Record audio', font=button_font, layout=record_frame, expand_x=True)],
+        [sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(80, 15), expand_x=True, expand_y=True)],
     ]
 
     path_to_dat = path.join(bundle_dir, 'icon.png')
