@@ -94,7 +94,7 @@ def capture_audio(seconds, window):
     except Exception as exception:
         window.write_event_value("-TRANSCRIBE_THREAD-", exception)
     finally:
-        window.write_event_value('-RECORD_BUTTON_THREAD-', "Capture audio")
+        window.write_event_value('-RECORD_BUTTON_THREAD-', "Microphone")
 
 
 def load_audio(audio_path, window):
@@ -147,7 +147,7 @@ def main(host_address):
             sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, size=(65, 1), expand_x=True),
         ],
         [
-            sg.FolderBrowse("Select audio folder", font=button_font, size=(28, 1)),
+            sg.FolderBrowse("Audio folder", font=button_font, size=(28, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from", expand_x=True)
         ],
         [
@@ -158,7 +158,7 @@ def main(host_address):
 
     record_frame = [
         [
-            sg.Button("Capture audio", font=button_font, size=(28, 1), key="-CAPTURE-"),
+            sg.Button("Microphone", font=button_font, size=(28, 1), key="-CAPTURE-"),
             sg.Button("Stop recording", font=button_font, size=(28, 1), key="-STOP_RECORDING-", disabled=True),
             sg.Text("Duration (seconds):", font=font, size=(16, 1)),
             sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font, expand_x=True),
@@ -224,7 +224,7 @@ def main(host_address):
 
         if event == "-RECORD_BUTTON_THREAD-":
             window["-CAPTURE-"].update(values[event], disabled=True)
-            if values[event] == "Capture audio":
+            if values[event] == "Microphone":
                 window["-CAPTURE-"].update(disabled=False)
             if values[event] == "Transcribing...":
                 window["-STOP_RECORDING-"].update(disabled=True)
