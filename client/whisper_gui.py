@@ -165,10 +165,16 @@ def main(host_address):
         ]
     ]
 
+    transcription_frame = [
+        [
+            sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(80, 15), expand_x=True, expand_y=True)
+        ]
+    ]
+
     elements = [
         [sg.Frame('Pre-recorded audio', font=button_font, layout=prerecorded_frame, expand_x=True)],
         [sg.Frame('Record audio', font=button_font, layout=record_frame, expand_x=True)],
-        [sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(80, 15), expand_x=True, expand_y=True)],
+        [sg.Frame('Transcription', font=button_font, layout=transcription_frame, expand_x=True, expand_y=True)],
     ]
 
     path_to_dat = path.join(bundle_dir, 'icon.png')
