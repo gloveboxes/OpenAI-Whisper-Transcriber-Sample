@@ -36,8 +36,6 @@ def capture_audio(seconds, window):
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    print('Recording')
-
     stream = p.open(format=sample_format,
                     channels=channels,
                     rate=fs,
@@ -174,7 +172,7 @@ def main(host_address):
                 sg.Button("Stop recording", font=button_font,
                           size=(28, 1), key="-STOP_RECORDING-", disabled=True),
                 sg.Text("Duration (seconds):", font=font),
-                sg.Input(60, size=(20, 1), key="-CAPTURE_DURATION-", font=font),
+                sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font),
             ]
         ],
         [sg.Multiline(key="-TRANSCRIPTION-",
@@ -211,7 +209,7 @@ def main(host_address):
             try:
                 duration = int(values["-CAPTURE_DURATION-"])
             except ValueError:
-                duration = 60
+                duration = 120
 
             window["-STOP_RECORDING-"].update(disabled=False)
             window["-TRANSCRIPTION-"].update("", text_color="black",
