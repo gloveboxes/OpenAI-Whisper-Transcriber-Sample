@@ -27,4 +27,4 @@ The solution is divided into two parts:
 
 The advantage of this architecture is the model is loaded once by the Whisper service, a relatively time consuming process, and called multiple times by the Whisper clients.
 
-![][media/architecture.png](https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/wiki/media/architecture.png)
+![media/architecture.png](https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/wiki/media/architecture.png)
