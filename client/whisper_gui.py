@@ -171,7 +171,7 @@ def main(host_address):
                           size=(28, 1), key="-CAPTURE-"),
                 sg.Button("Stop recording", font=button_font,
                           size=(28, 1), key="-STOP_RECORDING-", disabled=True),
-                sg.Text("Duration (seconds):", font=font),
+                sg.Text("Duration (seconds):", font=font, size=(16, 1)),
                 sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font),
             ]
         ],
