@@ -1,2 +1,5 @@
-pysimplegui
 requests
+pyaudio
+pydub
+pysimplegui
+wave
