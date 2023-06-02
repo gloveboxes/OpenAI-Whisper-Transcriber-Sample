@@ -16,6 +16,8 @@ import requests
 STOP_RECORDING = False
 HOST_ADDRESS = "http://localhost:5500"
 bundle_dir = path.abspath(path.dirname(__file__))
+WHISPER_API_KEY = ""
+WHISPER_API_KEY_NAME = 'Api-Key'
 
 
 def parse_folder(audio_path):
@@ -81,9 +83,14 @@ def capture_audio(seconds, window):
     try:
         window.write_event_value('-RECORD_BUTTON_THREAD-', "Transcribing...")
         endpoint = window["-WHISPER_ENDPOINT-"].get()
+        endpoint_key = window["-WHISPER_ENDPOINT_KEY-"].get()
 
-        result = requests.post(
-            f"{endpoint}/transcribe", data=in_memory_output_file_mp3, timeout=120)
+        # add a header to the post
+        headers = {}
+        if endpoint_key:
+            headers[WHISPER_API_KEY_NAME] = endpoint_key
+
+        result = requests.post(f"{endpoint}/transcribe", data=in_memory_output_file_mp3, timeout=120, headers=headers)
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
@@ -110,9 +117,15 @@ def load_audio(audio_path, window):
             image_raw = img.read()
 
         endpoint = window["-WHISPER_ENDPOINT-"].get()
+        endpoint_key = window["-WHISPER_ENDPOINT_KEY-"].get()
+
+        # add a header to the post
+        headers = {}
+        if endpoint_key:
+            headers[WHISPER_API_KEY_NAME] = endpoint_key
 
         result = requests.post(
-            f"{endpoint}/transcribe", data=image_raw, timeout=120)
+            f"{endpoint}/transcribe", data=image_raw, timeout=120, headers=headers)
 
         if result.status_code == 200:
             result = json.loads(result.text)
@@ -134,25 +147,32 @@ def load_audio(audio_path, window):
         window.refresh()
 
 
-def main(host_address):
+def main(host_address, whisper_api_key):
     '''Main function'''
     global STOP_RECORDING
 
     font = ("Arial", 14)
     button_font = ("Arial", 12)
 
-    prerecorded_frame = [
+    service_config_frame = [
         [
-            sg.Button("Update Whisper server address", font=button_font, size=(28, 1), key="-SET_HOST-"),
-            sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, size=(65, 1), expand_x=True),
-        ],
+            sg.Button("Update service config", font=button_font, size=(28, 1), key="-UPDATE_CONFIG-"),
+            sg.Text("Endpoint:", font=font),
+            sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, expand_x=True),
+            sg.Text("Key:", font=font),
+            sg.Input(whisper_api_key, key="-WHISPER_ENDPOINT_KEY-", font=font, password_char='*', expand_x=True),
+            sg.Checkbox("Show key", key="-SHOW_KEY-", font=font, enable_events=True)
+        ]
+    ]
+
+    prerecorded_frame = [
         [
             sg.FolderBrowse("Audio folder", font=button_font, size=(28, 1)),
             sg.Input(size=(65, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from", expand_x=True)
         ],
         [
             sg.Button("Transcribe", font=button_font, size=(28, 1), key="-TRANSCRIBE-"),
-            sg.Combo(key='-FILELIST-', size=(65, 20), enable_events=True, values=[], font=font, tooltip="Select audio file to transcribe", readonly=True, expand_x=True),
+            sg.Combo(key='-FILELIST-', enable_events=True, values=[], font=font, tooltip="Select audio file to transcribe", readonly=True, expand_x=True),
         ],
     ]
 
@@ -172,6 +192,7 @@ def main(host_address):
     ]
 
     elements = [
+        [sg.Frame('Whisper service config', font=button_font, layout=service_config_frame, expand_x=True)],
         [sg.Frame('Pre-recorded audio', font=button_font, layout=prerecorded_frame, expand_x=True)],
         [sg.Frame('Record audio', font=button_font, layout=record_frame, expand_x=True)],
         [sg.Frame('Transcription', font=button_font, layout=transcription_frame, expand_x=True, expand_y=True)],
@@ -233,11 +254,18 @@ def main(host_address):
             window["-TRANSCRIPTION-"].update(values[event],
                                              text_color="black", background_color="white")
 
-        if event == "-SET_HOST-":
+        if event == "-UPDATE_CONFIG-":
             # save the host name to a json config file
             host_address = values["-WHISPER_ENDPOINT-"]
+            api_key = values["-WHISPER_ENDPOINT_KEY-"]
             with open("config.json", "w", encoding='UTF-8') as config:
-                json.dump({"host_name": host_address}, config)
+                json.dump({"host_name": host_address, 'whisper_api_key': api_key}, config)
+
+        if event == "-SHOW_KEY-":
+            if values["-SHOW_KEY-"]:
+                window["-WHISPER_ENDPOINT_KEY-"].update(password_char="")
+            else:
+                window["-WHISPER_ENDPOINT_KEY-"].update(password_char="*")
 
     window.close()
 
@@ -245,11 +273,12 @@ def main(host_address):
 if __name__ == "__main__":
 
     # load the host name from a json config file
-    if path.exists("config.json"):
-        try:
-            with open("config.json", "r", encoding='UTF-8') as config_file:
-                HOST_ADDRESS = json.load(config_file)["host_name"]
-        except Exception:
-            HOST_ADDRESS = "http://localhost:5500"
+    try:
+        with open("config.json", "r", encoding='UTF-8') as config_file:
+            config = json.load(config_file)
+            HOST_ADDRESS = config["host_name"]
+            WHISPER_API_KEY = config["whisper_api_key"]
+    except Exception:
+        HOST_ADDRESS = "http://localhost:5500"
 
-    main(host_address=HOST_ADDRESS)
+    main(host_address=HOST_ADDRESS, whisper_api_key=WHISPER_API_KEY)
