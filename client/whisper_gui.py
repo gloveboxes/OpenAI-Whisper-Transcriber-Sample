@@ -88,7 +88,7 @@ def capture_audio(seconds, window):
         # add a header to the post
         headers = {}
         if endpoint_key:
-            headers[WHISPER_API_KEY_NAME] = endpoint_key
+            headers[WHISPER_API_KEY_NAME] = endpoint_key.strip()
 
         result = requests.post(f"{endpoint}/transcribe", data=in_memory_output_file_mp3, timeout=120, headers=headers)
         if result.status_code == 200:
@@ -122,7 +122,7 @@ def load_audio(audio_path, window):
         # add a header to the post
         headers = {}
         if endpoint_key:
-            headers[WHISPER_API_KEY_NAME] = endpoint_key
+            headers[WHISPER_API_KEY_NAME] = endpoint_key.strip()
 
         result = requests.post(
             f"{endpoint}/transcribe", data=image_raw, timeout=120, headers=headers)
