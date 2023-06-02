@@ -14,7 +14,7 @@ import requests
 
 
 STOP_RECORDING = False
-HOST_ADDRESS = "localhost"
+HOST_ADDRESS = "http://localhost:5500"
 bundle_dir = path.abspath(path.dirname(__file__))
 
 
@@ -83,7 +83,7 @@ def capture_audio(seconds, window):
         endpoint = window["-WHISPER_ENDPOINT-"].get()
 
         result = requests.post(
-            f"http://{endpoint}:5500/transcribe", data=in_memory_output_file_mp3, timeout=120)
+            f"{endpoint}/transcribe", data=in_memory_output_file_mp3, timeout=120)
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
@@ -112,7 +112,7 @@ def load_audio(audio_path, window):
         endpoint = window["-WHISPER_ENDPOINT-"].get()
 
         result = requests.post(
-            f"http://{endpoint}:5500/transcribe", data=image_raw, timeout=120)
+            f"{endpoint}/transcribe", data=image_raw, timeout=120)
 
         if result.status_code == 200:
             result = json.loads(result.text)
@@ -250,6 +250,6 @@ if __name__ == "__main__":
             with open("config.json", "r", encoding='UTF-8') as config_file:
                 HOST_ADDRESS = json.load(config_file)["host_name"]
         except Exception:
-            HOST_ADDRESS = "localhost"
+            HOST_ADDRESS = "http://localhost:5500"
 
     main(host_address=HOST_ADDRESS)
