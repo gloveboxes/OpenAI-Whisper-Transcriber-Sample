@@ -257,7 +257,7 @@ def main(host_address, whisper_api_key):
         if event == "-UPDATE_CONFIG-":
             # save the host name to a json config file
             host_address = values["-WHISPER_ENDPOINT-"]
-            api_key = values["-WHISPER_ENDPOINT_KEY-"]
+            api_key = values["-WHISPER_ENDPOINT_KEY-"].strip()
             with open("config.json", "w", encoding='UTF-8') as config:
                 json.dump({"host_name": host_address, 'whisper_api_key': api_key}, config)
 
