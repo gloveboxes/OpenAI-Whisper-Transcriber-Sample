@@ -25,16 +25,21 @@ def log_msg(msg):
     '''Log the request to the console.'''
     print(f"[{dt.datetime.now()}] {msg}")
 
+def log_request(msg):
+    '''Log the request to the console.'''
+    log_msg(f"[{dt.datetime.now()}]:[{request.remote_addr}] {msg}")
+
 @app.route('/transcribe', methods=['POST'])
 def transcribe_audio():
     '''Receives the audio file and returns the transcription.'''
     # check if the whisper api key is valid
+
     api_key = request.headers.get(WHISPER_API_KEY_NAME)
     if api_key != WHISPER_API_KEY_VALUE:
-        log_msg("Invalid API key")
+        log_request("Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
     
-    log_msg("Transcribing audio file - starting")
+    log_request("Transcribing audio file - starting")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
@@ -43,7 +48,7 @@ def transcribe_audio():
 
     try:
         transcription = MODEL.transcribe(audio=file_name)
-        log_msg("Transcribing audio file - finished")
+        log_request("Transcribing audio file - finished")
         return jsonify({'transcription': transcription['text']}), 200
 
     except Exception as exception:
