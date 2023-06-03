@@ -1,5 +1,6 @@
 '''gui to call the OpenAI Whisper Transcribe Server.'''
 
+import os
 from threading import Thread
 import glob
 import json
@@ -22,8 +23,19 @@ WHISPER_API_KEY_NAME = 'Api-Key'
 
 def parse_folder(audio_path):
     '''Parses the folder for audio files.'''
-    audio_files = glob.glob(f'{audio_path}/*.mp3') + \
-        glob.glob(f'{audio_path}/*.wav') + glob.glob(f'{audio_path}/*.m4a')
+    # MP3, MP4, MPEG, MPGA, M4A, WAV, and WEBM.
+    audio_files = \
+        glob.glob(f'{audio_path}/*.avi') + \
+        glob.glob(f'{audio_path}/*.mp3') + \
+        glob.glob(f'{audio_path}/*.mp4') + \
+        glob.glob(f'{audio_path}/*.mpeg') + \
+        glob.glob(f'{audio_path}/*.mpga') + \
+        glob.glob(f'{audio_path}/*.m4a') + \
+        glob.glob(f'{audio_path}/*.wav') + \
+        glob.glob(f'{audio_path}/*.webm')
+    
+    audio_files.sort(key=lambda f: os.path.splitext(f)[1])
+
     return audio_files
 
 
