@@ -31,7 +31,7 @@ def transcribe_audio():
         print(f"[{dt.datetime.now()}] Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
     
-    print(f"[{dt.datetime.now()}] Transcribing audio file...")
+    print(f"[{dt.datetime.now()}] Transcribing audio file")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
