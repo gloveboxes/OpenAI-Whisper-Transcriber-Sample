@@ -13,7 +13,7 @@ def transcribe_audio():
         headers = request.headers
         # post request to the relay server
         response = requests.post(
-            'http://localhost:5500/transcribe', data=request.data, timeout=300, headers=headers)
+            'http://localhost:5500/transcribe', data=request.data, headers=headers)
         return response.text, response.status_code
 
     except Exception as exception:
