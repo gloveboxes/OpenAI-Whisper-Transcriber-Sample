@@ -21,6 +21,9 @@ WHISPER_API_KEY_NAME = 'Api-Key'
 # https://www.bing.com/search?q=delete+python+env&qs=n&form=QBRE&sp=-1&lq=0&pq=delete+python+env&sc=7-17&sk=&cvid=9772B4993AFE4BC999D0FB5CE629F5B5&ghsh=0&ghacc=0&ghpl=&ntref=1
 # https://stackoverflow.com/questions/11005457/how-do-i-remove-delete-a-virtualenv
 
+def log_msg(msg):
+    '''Log the request to the console.'''
+    print(f"[{dt.datetime.now()}] {msg}")
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe_audio():
@@ -28,10 +31,10 @@ def transcribe_audio():
     # check if the whisper api key is valid
     api_key = request.headers.get(WHISPER_API_KEY_NAME)
     if api_key != WHISPER_API_KEY_VALUE:
-        print(f"[{dt.datetime.now()}] Invalid API key")
+        log_msg("Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
     
-    print(f"[{dt.datetime.now()}] Transcribing audio file")
+    log_msg("Transcribing audio file")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
@@ -73,12 +76,12 @@ def load_config():
 
 
 WHISPER_API_KEY_VALUE, model = load_config()
-print(f"Whisper API Key: {WHISPER_API_KEY_VALUE}")
+log_msg(f"Whisper API Key: {WHISPER_API_KEY_VALUE}")
 
 MODEL = whisper.load_model(model)
 
-print(f"Model: {model} loaded.")
-print("Ready to transcribe audio files.")
+log_msg(f"Model: {model} loaded.")
+log_msg("Ready to transcribe audio files.")
 
 if __name__ == '__main__':
     print("main")
