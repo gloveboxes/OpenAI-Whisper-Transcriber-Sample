@@ -28,8 +28,6 @@ def transcribe_audio():
     api_key = request.headers.get(WHISPER_API_KEY_NAME)
     if api_key != WHISPER_API_KEY_VALUE:
         return jsonify({'error': 'Unauthorized'}), 401
-    
-    audio = np.frombuffer(request.data, np.int16).flatten().astype(np.float32)
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
@@ -37,7 +35,7 @@ def transcribe_audio():
         file.write(request.data)
 
     try:
-        transcription = MODEL.transcribe(audio=audio)
+        transcription = MODEL.transcribe(audio=file_name)
         return jsonify({'transcription': transcription['text']}), 200
 
     except Exception as exception:
