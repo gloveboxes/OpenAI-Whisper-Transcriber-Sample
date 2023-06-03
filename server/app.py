@@ -26,7 +26,7 @@ def transcribe_audio():
     '''Receives the audio file and returns the transcription.'''
     # check if the whisper api key is valid
     api_key = request.headers.get(WHISPER_API_KEY_NAME)
-    if api_key is None or api_key != WHISPER_API_KEY_VALUE:
+    if api_key != WHISPER_API_KEY_VALUE:
         print(f"Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
     
