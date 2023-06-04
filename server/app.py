@@ -7,8 +7,6 @@ import uuid
 import datetime as dt
 import whisper
 from flask import Flask, request, jsonify
-# import ffmpeg
-# import numpy as np
 
 
 app = Flask(__name__)
@@ -22,24 +20,11 @@ WHISPER_API_KEY_NAME = 'Api-Key'
 # https://www.bing.com/search?q=delete+python+env&qs=n&form=QBRE&sp=-1&lq=0&pq=delete+python+env&sc=7-17&sk=&cvid=9772B4993AFE4BC999D0FB5CE629F5B5&ghsh=0&ghacc=0&ghpl=&ntref=1
 # https://stackoverflow.com/questions/11005457/how-do-i-remove-delete-a-virtualenv
 
+
 def log_msg(msg):
     '''Log the request to the console.'''
     print(f"[{dt.datetime.now()}] {msg}")
 
-# def load_audio(audio):
-#     '''Load the audio file and return the audio as a numpy array.'''
-#     try:
-#         # This launches a subprocess to decode audio while down-mixing and resampling as necessary.
-#         # Requires the ffmpeg CLI and `ffmpeg-python` package to be installed.
-#         out, _ = (
-#             ffmpeg.input(audio, threads=0)
-#             .output("-", format="s16le", acodec="pcm_s16le", ac=1, ar=sr)
-#             .run(cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
-#         )
-#     except ffmpeg.Error as exception:
-#         raise RuntimeError(f"Failed to load audio: {exception.stderr.decode()}") from exception
-
-#     return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe_audio():
@@ -50,9 +35,7 @@ def transcribe_audio():
     if api_key != WHISPER_API_KEY_VALUE:
         log_msg("Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
-    
 
-    
     log_msg("Transcribing audio file - starting")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
