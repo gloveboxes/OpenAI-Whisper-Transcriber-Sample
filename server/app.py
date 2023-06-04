@@ -4,10 +4,11 @@ import random
 import os
 import json
 import uuid
-import whisper
-import numpy as np
 import datetime as dt
+import whisper
 from flask import Flask, request, jsonify
+# import ffmpeg
+# import numpy as np
 
 
 app = Flask(__name__)
@@ -25,6 +26,21 @@ def log_msg(msg):
     '''Log the request to the console.'''
     print(f"[{dt.datetime.now()}] {msg}")
 
+# def load_audio(audio):
+#     '''Load the audio file and return the audio as a numpy array.'''
+#     try:
+#         # This launches a subprocess to decode audio while down-mixing and resampling as necessary.
+#         # Requires the ffmpeg CLI and `ffmpeg-python` package to be installed.
+#         out, _ = (
+#             ffmpeg.input(audio, threads=0)
+#             .output("-", format="s16le", acodec="pcm_s16le", ac=1, ar=sr)
+#             .run(cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
+#         )
+#     except ffmpeg.Error as exception:
+#         raise RuntimeError(f"Failed to load audio: {exception.stderr.decode()}") from exception
+
+#     return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
+
 @app.route('/transcribe', methods=['POST'])
 def transcribe_audio():
     '''Receives the audio file and returns the transcription.'''
@@ -34,6 +50,8 @@ def transcribe_audio():
     if api_key != WHISPER_API_KEY_VALUE:
         log_msg("Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
+    
+
     
     log_msg("Transcribing audio file - starting")
 
