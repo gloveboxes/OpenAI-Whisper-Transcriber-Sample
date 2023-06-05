@@ -1,6 +1,6 @@
 # Running OpenAI Whisper Sample
 
-The full documentation for this project is maintained in the repo [wiki](https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/wiki).
+The full documentation for this project is published [here](https://gloveboxes.github.io/OpenAI-Whisper-Transcriber-Docs/).
 
 ## Solution overview
 
