@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhisperNamespace.AudioPage">
+    <StackLayout>
+        <Entry x:Name="WhisperEndpoint" Placeholder="Whisper Endpoint eg http://localhost:5500" />
+        <Entry x:Name="WhisperKey" Placeholder="Whisper Key" />
+        <Button Text="Select audio file folder" Clicked="BrowseButton_Clicked" />
+        <Picker x:Name="AudioDropdown" />
+        <Button Text="Transcribe the audio file" Clicked="UploadButton_Clicked" />
+        <Label x:Name="ResponseLabel" />
+    </StackLayout>
+</ContentPage>
