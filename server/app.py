@@ -36,12 +36,18 @@ def transcribe_audio():
         log_msg("Invalid API key")
         return jsonify({'error': 'Unauthorized'}), 401
 
+    data = request.get_data()
+
+    if len(data) == 0:
+        log_msg("No audio file received")
+        return jsonify({'error': 'No audio file received'}), 400
+
     log_msg("Transcribing audio file - starting")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
     with open(file_name, "wb") as file:
-        file.write(request.data)
+        file.write(data)
 
     try:
         transcription = MODEL.transcribe(audio=file_name)
