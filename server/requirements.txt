@@ -2,4 +2,3 @@ openai-whisper
 chardet
 flask
 requests
-gunicorn
