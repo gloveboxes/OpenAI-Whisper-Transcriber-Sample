@@ -102,7 +102,11 @@ def capture_audio(seconds, window):
         if endpoint_key:
             headers[WHISPER_API_KEY_NAME] = endpoint_key.strip()
 
-        result = requests.post(f"{endpoint}/transcribe", data=in_memory_output_file_mp3, timeout=120, headers=headers)
+        files = {
+            'file': ('audio.mp3', in_memory_output_file_mp3),
+        }
+
+        result = requests.post(f"{endpoint}/transcribe", files=files, timeout=120, headers=headers)
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
@@ -125,8 +129,9 @@ def load_audio(audio_path, window):
         window["-TRANSCRIBE-"].update(disabled=True)
         window.refresh()
 
-        with open(audio_path, 'rb') as img:
-            image_raw = img.read()
+        files = {
+            'file': ('audio.mp3', open(audio_path, 'rb')),
+        }
 
         endpoint = window["-WHISPER_ENDPOINT-"].get()
         endpoint_key = window["-WHISPER_ENDPOINT_KEY-"].get()
@@ -137,7 +142,7 @@ def load_audio(audio_path, window):
             headers[WHISPER_API_KEY_NAME] = endpoint_key.strip()
 
         result = requests.post(
-            f"{endpoint}/transcribe", data=image_raw, timeout=120, headers=headers)
+            f"{endpoint}/transcribe", files=files, timeout=120, headers=headers)
 
         if result.status_code == 200:
             result = json.loads(result.text)
