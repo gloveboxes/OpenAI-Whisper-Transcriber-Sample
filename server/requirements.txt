@@ -1,7 +1,7 @@
 openai-whisper
 chardet
-flask
-requests
+# flask
+# requests
 # gunicorn
 
 fastapi
