@@ -130,7 +130,7 @@ def load_audio(audio_path, window):
         window.refresh()
 
         files = {
-            'file': ('audio.mp3', open(audio_path, 'rb')),
+            'file': ('microphone.mp3', open(audio_path, 'rb')),
         }
 
         endpoint = window["-WHISPER_ENDPOINT-"].get()

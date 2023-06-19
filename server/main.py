@@ -23,7 +23,7 @@ def log_msg(msg):
     print(f"[{dt.datetime.now()}] {msg}")
 
 
-@app.post("/transcribe/", status_code=200)
+@app.post("/transcribe", status_code=200)
 async def create_upload_file(file: UploadFile, response: Response, request: Request):
     '''Receives the audio file and returns the transcription.'''
 
@@ -38,7 +38,7 @@ async def create_upload_file(file: UploadFile, response: Response, request: Requ
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {'error': 'No audio file received'}
 
-    log_msg("Transcribing audio file - starting")
+    log_msg(f"Starting: {file.filename} transcription")
 
     file_name = 'tmp' + str(random.randint(0, 1000000)) + '.bin'
 
@@ -48,7 +48,7 @@ async def create_upload_file(file: UploadFile, response: Response, request: Requ
 
     try:
         transcription = MODEL.transcribe(audio=file_name)
-        log_msg("Transcribing audio file - finished")
+        log_msg(f"Finished: {file.filename} transcription")
         return {'transcription': transcription['text']}
 
     except Exception as exception:
