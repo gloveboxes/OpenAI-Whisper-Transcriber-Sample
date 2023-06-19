@@ -2,8 +2,7 @@ openai-whisper
 chardet
 # flask
 # requests
-# gunicorn
-
+gunicorn
 fastapi
 uvicorn
 python-multipart
