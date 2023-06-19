@@ -6,7 +6,8 @@ import requests
 
 PORT = 8000  # Change this as needed
 WHISPER_ENDPOINT = "http://localhost:5500/transcribe"
-
+WHISPER_API_KEY = None
+WHISPER_API_KEY_NAME = 'Api-Key'
 
 class MyRequestHandler(SimpleHTTPRequestHandler):
     '''Custom request handler'''
@@ -29,9 +30,18 @@ class MyRequestHandler(SimpleHTTPRequestHandler):
         file_start = post_data.find(b'\r\n\r\n') + 4
         file_data = post_data[file_start:]
 
+        # add a header to the post
+        headers = {}
+        if WHISPER_API_KEY:
+            headers[WHISPER_API_KEY_NAME] = WHISPER_API_KEY.strip()
+
+        files = {
+            'file': ('web audio', file_data),
+        }
+
         try:
             result = requests.post(
-                WHISPER_ENDPOINT, data=file_data, timeout=120)
+                WHISPER_ENDPOINT, files=files, timeout=240, headers=headers)
 
             if result.status_code == 200:
                 result = json.loads(result.text)
@@ -46,7 +56,7 @@ class MyRequestHandler(SimpleHTTPRequestHandler):
                     self.wfile.write(text.encode())
             else:
                 self.send_response(result.status_code)
-                self.send_header('Content-type', 'text/html')
+                self.send_header('Content-type', 'application/json')
                 self.end_headers()
                 self.wfile.write(result.text.encode())
 
@@ -65,5 +75,14 @@ httpd = HTTPServer(server_address, MyRequestHandler)
 
 # Start the server
 print(f'Starting the web server on {PORT}...')
+
+# load the host name from a json config file
+try:
+    with open("config.json", "r", encoding='UTF-8') as config_file:
+        config = json.load(config_file)
+        HOST_ADDRESS = config["host_name"]
+        WHISPER_API_KEY = config["whisper_api_key"]
+except Exception:
+    HOST_ADDRESS = "http://localhost:5500"
 
 httpd.serve_forever()
