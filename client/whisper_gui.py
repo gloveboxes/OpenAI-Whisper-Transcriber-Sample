@@ -106,7 +106,7 @@ def capture_audio(seconds, window):
             'file': ('microphone.mp3', in_memory_output_file_mp3),
         }
 
-        result = requests.post(f"{endpoint}/transcribe", files=files, timeout=120, headers=headers)
+        result = requests.post(f"{endpoint}/transcribe", files=files, timeout=240, headers=headers)
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
