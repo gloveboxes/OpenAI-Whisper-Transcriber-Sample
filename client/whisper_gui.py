@@ -103,7 +103,7 @@ def capture_audio(seconds, window):
             headers[WHISPER_API_KEY_NAME] = endpoint_key.strip()
 
         files = {
-            'file': ('audio.mp3', in_memory_output_file_mp3),
+            'file': ('microphone.mp3', in_memory_output_file_mp3),
         }
 
         result = requests.post(f"{endpoint}/transcribe", files=files, timeout=120, headers=headers)
@@ -129,8 +129,11 @@ def load_audio(audio_path, window):
         window["-TRANSCRIBE-"].update(disabled=True)
         window.refresh()
 
+        # get the audio filename
+        audio_filename = os.path.basename(audio_path)
+
         files = {
-            'file': ('microphone.mp3', open(audio_path, 'rb')),
+            'file': (audio_filename, open(audio_path, 'rb')),
         }
 
         endpoint = window["-WHISPER_ENDPOINT-"].get()
