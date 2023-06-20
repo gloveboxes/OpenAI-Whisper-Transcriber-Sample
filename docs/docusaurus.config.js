@@ -10,7 +10,7 @@ const config = {
   tagline: "OpenAI Speech to Text Transcription Workshop",
 
   url: "https://gloveboxes.github.io/",
-  baseUrl: "/OpenAI-Whisper-Transcriber-Docs/",
+  baseUrl: "/OpenAI-Whisper-Transcriber-Sample/",
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "gloveboxes", // Usually your GitHub org/user name.
-  projectName: "OpenAI-Whisper-Transcriber-Docs", // Usually your repo name.
+  projectName: "OpenAI-Whisper-Transcriber-Sample", // Usually your repo name.
 
   deploymentBranch: "gh-pages", // Branch that GitHub pages will deploy from.
 
@@ -43,7 +43,7 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Docs/tree/main",
+          editUrl: "https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/tree/main",
         },
         blog: false,
         theme: {
