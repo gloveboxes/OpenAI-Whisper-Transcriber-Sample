@@ -14,7 +14,7 @@ Follow the deployment and run instructions on the right hand side of this page t
 
 The OpenAI Whisper model is an Open Source speech-to-text transcription model that is trained on 680,000 hours of multilingual and multitask supervised data collected from the web. 
 
-OpenAI describes Whisper as an[encoder-decoder transformer](https://kikaben.com/transformers-encoder-decoder/), a type of neural network that can use context gleaned from input data to learn associations that can then be translated into the model's output.
+OpenAI describes Whisper as an [encoder-decoder transformer](https://kikaben.com/transformers-encoder-decoder/), a type of neural network that can use context gleaned from input data to learn associations that can then be translated into the model's output.
 
 ## Solution Architecture
 
