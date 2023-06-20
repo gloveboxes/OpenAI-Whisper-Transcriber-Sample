@@ -22,7 +22,6 @@ jobs:
       - name: Build docs
         working-directory: ./docs
         run: |
-          cd docs
           npm ci
           npm run build
 
