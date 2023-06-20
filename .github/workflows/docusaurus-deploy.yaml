@@ -17,8 +17,10 @@ jobs:
           cache-dependency-path: docs/package-lock.json
 
       - name: Install dependencies
+        working-directory: docs
         run: npm install
       - name: Build website
+        working-directory: docs
         run: npm run build
 
       - name: Deploy to GitHub Pages
