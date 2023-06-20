@@ -43,7 +43,7 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/tree/main",
+          editUrl: "https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample/tree/master/docs/",
         },
         blog: false,
         theme: {
