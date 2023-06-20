@@ -85,7 +85,7 @@ Follow the instructions for your operating system.
 9.   Start the Whisper Transcriber Service. From the command line, run:
 
         ```bash
-        uvicorn main:app --port 5500
+        uvicorn main:app --port 5500 --host 0.0.0.0
         ```
 
         Once the Whisper Transcriber Service starts, you should see output similar to the following.

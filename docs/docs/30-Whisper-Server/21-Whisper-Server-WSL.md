@@ -94,7 +94,7 @@ Ensure the NVidia drivers are up to date. The NVidia drivers are installed in Wi
 10.  Start the Whisper Transcriber Service. From the command line, run:
 
         ```bash
-        uvicorn main:app --port=5500
+        uvicorn main:app --port 5500 --host 0.0.0.0
         ```
 
         Once the Whisper Transcriber Service starts, you should see output similar to the following.
