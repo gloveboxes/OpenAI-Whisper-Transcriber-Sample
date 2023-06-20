@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "gloveboxes", // Usually your GitHub org/user name.
-  projectName: "OpenAI-Whisper-Transcriber-Sample", // Usually your repo name.
+  projectName: "docs", // Usually your repo name.
 
   deploymentBranch: "gh-pages", // Branch that GitHub pages will deploy from.
 
