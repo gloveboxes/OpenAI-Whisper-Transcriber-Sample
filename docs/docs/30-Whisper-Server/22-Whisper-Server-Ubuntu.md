@@ -88,7 +88,7 @@ The recommended configuration for running the OpenAI Whisper sample on Ubuntu is
 10.  Start the Whisper Transcriber Service. From the command line, run:
 
         ```bash
-        uvicorn main:app
+        uvicorn main:app --port=5500
         ```
 
         Once the Whisper Transcriber Service starts, you should see output similar to the following.
