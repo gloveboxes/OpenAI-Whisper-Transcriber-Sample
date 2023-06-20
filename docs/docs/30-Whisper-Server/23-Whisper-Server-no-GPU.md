@@ -64,7 +64,7 @@ Follow the instructions for your operating system.
 5. Activate the Python virtual environment.
 
     ```bash
-    source whisper-server/bin/activate
+    source .whisper-venv/bin/activate
     ```
 
 6. Install the required Python libraries.
