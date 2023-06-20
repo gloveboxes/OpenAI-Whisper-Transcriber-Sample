@@ -6,8 +6,8 @@ slug: /
 import Social from '@site/src/components/social';
 
 <Social
-    page_url="https://gloveboxes.github.io/OpenAI-Whisper-Transcriber-Docs"
-    image_url="https://gloveboxes.github.io/OpenAI-Whisper-Transcriber-Docs/assets/images/whispering-wide-66e027604c6c49af3c4a05b6144b2f40.jpeg"
+    page_url="https://gloveboxes.github.io/OpenAI-Whisper-Transcriber-Sample"
+    image_url="https://gloveboxes.github.io/OpenAI-Whisper-Transcriber-Sample/assets/images/whispering-wide-66e027604c6c49af3c4a05b6144b2f40.jpeg"
     title="OpenAI Whisper Transcriber"
     description= "🏭 Get started with OpenAI Whisper Speech to Text Transcription"
     hashtags="OpenAI"
