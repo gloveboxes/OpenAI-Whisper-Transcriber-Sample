@@ -20,11 +20,9 @@ import Social from '@site/src/components/social';
 
 OpenAI Whisper is a speech-to-text transcription library that uses the [OpenAI Whisper](https://openai.com/research/whisper) models. 
 
-The whisper model is available as a cloud [Speech to text API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI or you can run the Whisper model locally. This sample demonstrates how to run the Whisper model locally.
+The whisper model is available as a cloud [Speech to text API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI or you can run the Whisper model locally. 
 
-Welcome to the OpenAI Whisper Transcriber Sample. This sample demonstrates how to use the [openai-whisper](https://pypi.org/project/openai-whisper/) library to transcribe audio files.
-
-Follow the deployment and run instructions in the right-hand navigation panel to deploy the sample.
+This sample demonstrates how to run the Whisper model locally with the [openai-whisper](https://pypi.org/project/openai-whisper/) library to transcribe audio files.
 
 ## What is OpenAI Whisper?
 
