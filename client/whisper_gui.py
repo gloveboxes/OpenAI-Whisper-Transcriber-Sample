@@ -1,5 +1,7 @@
 '''gui to call the OpenAI Whisper Transcribe Server.'''
 
+# https://github.com/openai/openai-cookbook/blob/main/examples/How_to_call_functions_with_chat_models.ipynb
+
 import os
 from threading import Thread
 import glob
