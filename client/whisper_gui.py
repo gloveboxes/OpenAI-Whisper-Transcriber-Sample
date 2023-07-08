@@ -247,6 +247,10 @@ def capture_audio(seconds, window, openai_functions):
             result = json.loads(result.text)
             if result:
                 if openai_functions:
+                    window.write_event_value("-TRANSCRIBE_THREAD-", result["transcription"].strip())
+                    window.refresh()
+
+                    # get the openai functions
                     text = get_openai_functions(result["transcription"].strip())
                     window.write_event_value("-TRANSCRIBE_THREAD-", text)
                 else:
