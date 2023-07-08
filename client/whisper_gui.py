@@ -12,6 +12,7 @@ import pydub
 import pyaudio
 import PySimpleGUI as sg
 import requests
+import openai
 
 
 STOP_RECORDING = False
@@ -19,6 +20,111 @@ HOST_ADDRESS = "http://localhost:5500"
 bundle_dir = path.abspath(path.dirname(__file__))
 WHISPER_API_KEY = ""
 WHISPER_API_KEY_NAME = 'Api-Key'
+last_assistant_message = ""
+
+light_state = {
+    "name": "set_light_state",
+    "description": "Set the light state to on or off",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "device": {
+                "type": "string",
+                "description": "The name of the light to set"
+            },
+            "state": {
+                "type": "string",
+                "enum": ["on", "off"]
+            },
+        },
+        "required": ["device", "state"]
+    }
+}
+
+light_color = {
+    "name": "set_light_color",
+    "description": "Set the light color",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "device": {
+                "type": "string",
+                "description": "The name of the light to set"
+            },
+            "color": {
+                "type": "string",
+                "enum": ["red", "white", "blue", "green", "yellow", "purple", "orange", "pink", "cyan", "magenta", "lime", "indigo", "teal", "olive", "brown", "black", "grey", "silver", "gold", "bronze", "platinum", "rainbow"]
+            },
+        },
+        "required": ["device", "color"]
+    }
+}
+
+light_brightness = {
+    "name": "set_light_brightness",
+    "description": "Set the light brightness",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "device": {
+                "type": "string",
+                "description": "The name of the light to set"
+            },
+            "brightness": {
+                "type": "string",
+                "enum": ["low", "medium", "high"]
+            },
+        },
+        "required": ["device", "brightness"]
+    }
+}
+
+washing_machine_state = {
+    "name": "set_washing_machine_state",
+    "description": "Turn the washing machine on or off",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "device": {
+                "type": "string",
+                "description": "The name of the washing machine"
+            },
+            "state": {
+                "type": "string",
+                "enum": ["on", "off"]
+            },
+        },
+        "required": ["device", "state"]
+    }
+}
+
+lock_state = {
+    "name": "set_lock_state",
+    "description": "lock or unlock",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "device": {
+                "type": "string",
+                "description": "The name of the lock device"
+            },
+            "state": {
+                "type": "string",
+                "enum": ["lock", "unlock"]
+            },
+        },
+        "required": ["device", "state"]
+    }
+}
+
+
+openai_functions = [
+    light_state,
+    light_color,
+    light_brightness,
+    washing_machine_state,
+    lock_state
+]
 
 
 def parse_folder(audio_path):
@@ -33,13 +139,42 @@ def parse_folder(audio_path):
         glob.glob(f'{audio_path}/*.m4a') + \
         glob.glob(f'{audio_path}/*.wav') + \
         glob.glob(f'{audio_path}/*.webm')
-    
+
     audio_files.sort(key=lambda f: os.path.splitext(f)[1])
 
     return audio_files
 
+def get_openai_functions(text):
+    '''Gets the OpenAI functions from the text.'''
+    global last_assistant_message
+    result = text
 
-def capture_audio(seconds, window):
+    response_1 = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo-0613",
+    messages=[
+        {"role": "system", "content": "You are a home automation assistant. Device names with no spaces. Device types limited to the functions. Ask for the device name"},
+        {"role": "assistant", "content": last_assistant_message},
+        {"role": "user", "content": text},
+    ],
+    functions=openai_functions,
+    temperature=0.0,
+    
+    )
+
+    # The assistant's response includes a function call. We extract the arguments from this function call
+
+    result = response_1.get('choices')[0].get('message')
+    if result["content"]:
+        last_assistant_message = result["content"]
+        print(last_assistant_message)
+
+    if result.get("function_call"):
+        last_assistant_message = ""
+
+    return text + "\n" + str(result)
+
+
+def capture_audio(seconds, window, openai_functions):
     '''Captures audio from the microphone and convert to in memory mp3 file.'''
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
@@ -51,10 +186,10 @@ def capture_audio(seconds, window):
     py_audio = pyaudio.PyAudio()  # Create an interface to PortAudio
 
     stream = py_audio.open(format=sample_format,
-                    channels=channels,
-                    rate=sample_rate,
-                    frames_per_buffer=chunk,
-                    input=True)
+                           channels=channels,
+                           rate=sample_rate,
+                           frames_per_buffer=chunk,
+                           input=True)
 
     frames = []  # Initialize array to store frames
 
@@ -106,14 +241,20 @@ def capture_audio(seconds, window):
             'file': ('microphone.mp3', in_memory_output_file_mp3),
         }
 
-        result = requests.post(f"{endpoint}/transcribe", files=files, timeout=240, headers=headers)
+        result = requests.post(
+            f"{endpoint}/transcribe", files=files, timeout=240, headers=headers)
         if result.status_code == 200:
             result = json.loads(result.text)
             if result:
-                text = (result["transcription"]).strip()
-                window.write_event_value("-TRANSCRIBE_THREAD-", text)
+                if openai_functions:
+                    text = get_openai_functions(result["transcription"].strip())
+                    window.write_event_value("-TRANSCRIBE_THREAD-", text)
+                else:
+                    text = (result["transcription"]).strip()
+                    window.write_event_value("-TRANSCRIBE_THREAD-", text)
         else:
-            window.write_event_value("-TRANSCRIBE_THREAD-", result.text.encode())
+            window.write_event_value(
+                "-TRANSCRIBE_THREAD-", result.text.encode())
     except Exception as exception:
         window.write_event_value("-TRANSCRIBE_THREAD-", exception)
     finally:
@@ -167,7 +308,7 @@ def load_audio(audio_path, window):
         window.refresh()
 
 
-def main(host_address, whisper_api_key):
+def main(host_address, whisper_api_key, openai_api_key):
     '''Main function'''
     global STOP_RECORDING
 
@@ -177,10 +318,8 @@ def main(host_address, whisper_api_key):
     service_config_frame = [
         [
             sg.Button("Update service config", font=button_font, size=(28, 1), key="-UPDATE_CONFIG-"),
-            sg.Text("Endpoint:", font=font),
-            sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, expand_x=True),
-            sg.Text("Key:", font=font),
-            sg.Input(whisper_api_key, key="-WHISPER_ENDPOINT_KEY-", font=font, password_char='*', expand_x=True),
+            sg.Text("Endpoint:", font=font), sg.Input(host_address, key="-WHISPER_ENDPOINT-", font=font, expand_x=True),
+            sg.Text("Key:", font=font), sg.Input(whisper_api_key, key="-WHISPER_ENDPOINT_KEY-", font=font, password_char='*', expand_x=True),
             sg.Checkbox("Show key", key="-SHOW_KEY-", font=font, enable_events=True)
         ]
     ]
@@ -188,7 +327,8 @@ def main(host_address, whisper_api_key):
     prerecorded_frame = [
         [
             sg.FolderBrowse("Audio folder", font=button_font, size=(28, 1)),
-            sg.Input(size=(65, 1), enable_events=True, key="-FILE-", font=font, tooltip="Select folder to load audio from", expand_x=True)
+            sg.Input(size=(65, 1), enable_events=True, key="-FILE-", font=font,
+                     tooltip="Select folder to load audio from", expand_x=True)
         ],
         [
             sg.Button("Transcribe", font=button_font, size=(28, 1), key="-TRANSCRIBE-"),
@@ -200,8 +340,13 @@ def main(host_address, whisper_api_key):
         [
             sg.Button("Microphone", font=button_font, size=(28, 1), key="-CAPTURE-"),
             sg.Button("Stop recording", font=button_font, size=(28, 1), key="-STOP_RECORDING-", disabled=True),
-            sg.Text("Duration (seconds):", font=font, size=(16, 1)),
-            sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font, expand_x=True),
+            sg.Text("Duration (seconds):", font=font, size=(16, 1)),sg.Input(120, size=(20, 1), key="-CAPTURE_DURATION-", font=font, expand_x=True),
+        ]
+    ]
+
+    home_automation_frame = [
+        [
+            sg.Checkbox("Enable Home Automation OpenAI Functions", key="-OPENAI_FUNCTIONS-", font=font, enable_events=True)
         ]
     ]
 
@@ -215,6 +360,7 @@ def main(host_address, whisper_api_key):
         [sg.Frame('Whisper service config', font=button_font, layout=service_config_frame, expand_x=True)],
         [sg.Frame('Pre-recorded audio', font=button_font, layout=prerecorded_frame, expand_x=True)],
         [sg.Frame('Record audio', font=button_font, layout=record_frame, expand_x=True)],
+        [sg.Frame('Home Automation', font=button_font, layout=home_automation_frame, expand_x=True)],
         [sg.Frame('Transcription', font=button_font, layout=transcription_frame, expand_x=True, expand_y=True)],
     ]
 
@@ -256,7 +402,7 @@ def main(host_address, whisper_api_key):
             window.refresh()
 
             STOP_RECORDING = False
-            thread = Thread(target=capture_audio, args=(duration, window))
+            thread = Thread(target=capture_audio, args=(duration, window, values["-OPENAI_FUNCTIONS-"]))
             thread.start()
             # capture_audio(duration, window)
 
@@ -279,13 +425,25 @@ def main(host_address, whisper_api_key):
             host_address = values["-WHISPER_ENDPOINT-"]
             api_key = values["-WHISPER_ENDPOINT_KEY-"].strip()
             with open("config.json", "w", encoding='UTF-8') as config:
-                json.dump({"host_name": host_address, 'whisper_api_key': api_key}, config)
+                json.dump({"host_name": host_address,
+                          'whisper_api_key': api_key}, config)
 
         if event == "-SHOW_KEY-":
             if values["-SHOW_KEY-"]:
                 window["-WHISPER_ENDPOINT_KEY-"].update(password_char="")
             else:
                 window["-WHISPER_ENDPOINT_KEY-"].update(password_char="*")
+
+        if event == "-OPENAI_FUNCTIONS-":
+            if values["-OPENAI_FUNCTIONS-"]:
+                #    list all the functions names and descriptions in the list openai_functions
+                items = ""
+                for function in openai_functions:
+                    items += function.get("name") + " :: " + function.get('description') + "\n"
+                window["-TRANSCRIPTION-"].update(items, text_color="black", background_color="white")
+            else:
+                window["-TRANSCRIPTION-"].update("", text_color="black", background_color="white")
+
 
     window.close()
 
@@ -301,4 +459,11 @@ if __name__ == "__main__":
     except Exception:
         HOST_ADDRESS = "http://localhost:5500"
 
-    main(host_address=HOST_ADDRESS, whisper_api_key=WHISPER_API_KEY)
+    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+
+    if not OPENAI_API_KEY:
+        print("OPENAI_API_KEY environment variable not set")
+        exit(1)
+
+    main(host_address=HOST_ADDRESS, whisper_api_key=WHISPER_API_KEY,
+         openai_api_key=OPENAI_API_KEY)
