@@ -6,3 +6,5 @@ chardet
 fastapi
 uvicorn
 python-multipart
+uvloop
+httptools
