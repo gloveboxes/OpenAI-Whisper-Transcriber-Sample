@@ -65,7 +65,7 @@ Ensure the NVidia drivers are up to date. The NVidia drivers are installed in Wi
 5. Activate the Python virtual environment.
 
     ```bash
-    source whisper-server/bin/activate
+    source .whisper-venv/bin/activate
     ```
 
 6. Install the required Python libraries.
