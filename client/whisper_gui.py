@@ -126,6 +126,14 @@ openai_functions = [
     lock_state
 ]
 
+device_names = [ "washingmachine", "bedroomlight", "livingroomlight", 
+                "frontdoor", "backdoor", "garagedoor" ]
+
+def validate_device_name(device_name):
+    '''This would normally be a home automation cloud services to validate the device name.'''
+    # is the device found in the list of device names?
+    return device_name in device_names
+
 
 def parse_folder(audio_path):
     '''Parses the folder for audio files.'''
@@ -144,7 +152,7 @@ def parse_folder(audio_path):
 
     return audio_files
 
-def get_openai_functions(text):
+def get_openai_functions(text, window):
     '''Gets the OpenAI functions from the text.'''
     global last_assistant_message
     result = text
@@ -152,13 +160,12 @@ def get_openai_functions(text):
     response_1 = openai.ChatCompletion.create(
     model="gpt-3.5-turbo-0613",
     messages=[
-        {"role": "system", "content": "You are a home automation assistant. Device names with no spaces. Device types limited to the functions. Ask for the device name"},
+        {"role": "system", "content": "You are a home automation assistant. Device types limited to those listed in functions. Ask for the device name. Device names have no spaces."},
         {"role": "assistant", "content": last_assistant_message},
         {"role": "user", "content": text},
     ],
     functions=openai_functions,
     temperature=0.0,
-    
     )
 
     # The assistant's response includes a function call. We extract the arguments from this function call
@@ -166,10 +173,26 @@ def get_openai_functions(text):
     result = response_1.get('choices')[0].get('message')
     if result["content"]:
         last_assistant_message = result["content"]
-        print(last_assistant_message)
+        window.write_event_value("-CONTENT_THREAD-", last_assistant_message)
+        window.refresh()
 
     if result.get("function_call"):
         last_assistant_message = ""
+        window.write_event_value("-CONTENT_THREAD-", last_assistant_message)
+        window.refresh()
+
+        arguments = result.get("function_call").get("arguments")
+        args = json.loads(arguments)
+
+        device = args.get("device")
+        if not validate_device_name(device):
+            window.write_event_value("-CONTENT_THREAD-", f"The {device} device is not a home automated devices. Please try again.")
+            window.refresh()
+        else:
+            window.write_event_value("-CONTENT_THREAD-", "Success. Is there anything else I can help you with?")
+            window.refresh()
+
+
 
     return text + "\n" + str(result)
 
@@ -251,8 +274,9 @@ def capture_audio(seconds, window, openai_functions):
                     window.refresh()
 
                     # get the openai functions
-                    text = get_openai_functions(result["transcription"].strip())
+                    text = get_openai_functions(result["transcription"].strip(), window)
                     window.write_event_value("-TRANSCRIBE_THREAD-", text)
+                    window.refresh()
                 else:
                     text = (result["transcription"]).strip()
                     window.write_event_value("-TRANSCRIBE_THREAD-", text)
@@ -356,7 +380,8 @@ def main(host_address, whisper_api_key, openai_api_key):
 
     transcription_frame = [
         [
-            sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(80, 15), expand_x=True, expand_y=True)
+            sg.Multiline(key="-TRANSCRIPTION-", font=("Arial", 16), size=(40, 15), expand_x=True, expand_y=True),
+            sg.Multiline(key="-CONTENT-", font=("Arial", 16), size=(40, 15), expand_x=True, expand_y=True)
         ]
     ]
 
@@ -402,13 +427,13 @@ def main(host_address, whisper_api_key, openai_api_key):
 
             window["-STOP_RECORDING-"].update(disabled=False)
             window["-TRANSCRIPTION-"].update("", text_color="black",
-                                             background_color="white")
+                                            background_color="white")
             window.refresh()
 
             STOP_RECORDING = False
             thread = Thread(target=capture_audio, args=(duration, window, values["-OPENAI_FUNCTIONS-"]))
             thread.start()
-            # capture_audio(duration, window)
+
 
         if event == "-STOP_RECORDING-":
             STOP_RECORDING = True
@@ -422,6 +447,10 @@ def main(host_address, whisper_api_key, openai_api_key):
 
         if event == "-TRANSCRIBE_THREAD-":
             window["-TRANSCRIPTION-"].update(values[event],
+                                             text_color="black", background_color="white")
+            
+        if event == "-CONTENT_THREAD-":
+            window["-CONTENT-"].update(values[event],
                                              text_color="black", background_color="white")
 
         if event == "-UPDATE_CONFIG-":
