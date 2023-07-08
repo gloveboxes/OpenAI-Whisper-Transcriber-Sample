@@ -59,7 +59,7 @@ The recommended configuration for running the OpenAI Whisper sample on Ubuntu is
 5. Activate the Python virtual environment.
 
     ```bash
-    source whisper-server/bin/activate
+    source .whisper-venv/bin/activate
     ```
 
 6. Install the required Python libraries.
