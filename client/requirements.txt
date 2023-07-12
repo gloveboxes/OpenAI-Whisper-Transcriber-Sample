@@ -1,5 +1,5 @@
 requests
 pyaudio
-pydub
-pysimplegui
-wave
+openai
+SpeechRecognition
+openai_whisper
