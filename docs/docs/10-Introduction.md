@@ -16,7 +16,7 @@ import Social from '@site/src/components/social';
 
 ![](../static/img/whispering-wide.jpeg)
 
-# OpenAI Whisper Transcriber
+# Build a home assistant with OpenAI Whisper and Functions
 
 OpenAI Whisper is a speech-to-text transcription library that uses the [OpenAI Whisper](https://openai.com/research/whisper) models. 
 

@@ -6,8 +6,8 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Explore OpenAI Whisper Speech to Text Transcription",
-  tagline: "OpenAI Speech to Text Transcription Workshop",
+  title: "Build a home assistant with OpenAI Whisper and Functions",
+  tagline: "Build a home assistant with OpenAI Whisper and Functions",
 
   url: "https://gloveboxes.github.io/",
   baseUrl: "/OpenAI-Whisper-Transcriber-Sample/",
@@ -57,7 +57,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: "Explore OpenAI Whisper Speech to Text Transcription",
+        title: "Build a home assistant with OpenAI Whisper and Functions.",
         logo: {
           alt: "My Site Logo",
           src: "img/Azure-OpenAI-Services.svg",
@@ -67,7 +67,7 @@ const config = {
       footer: {
         style: "dark",
         links: [],
-        copyright: `Copyright © ${new Date().getFullYear()} Explore OpenAI Whisper Speech to Text Transcription Workshop. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Build a home assistant with OpenAI Whisper and Functions Workshop. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
