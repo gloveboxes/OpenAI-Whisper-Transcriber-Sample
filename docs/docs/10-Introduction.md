@@ -16,7 +16,7 @@ import Social from '@site/src/components/social';
 
 ![](../static/img/whispering-wide.jpeg)
 
-# Build a home assistant with OpenAI Whisper and OpenAI Functions
+# Build a home assistant with OpenAI Whisper and Functions
 
 This sample demonstrates how you can build a simple home assistant with [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling). OpenAI Whisper is a powerful multilingual speech-to-text transcription model. OpenAI Functions extract structured data from unstructured prompt data, making it easier for your code to determine the next course of action.
 
