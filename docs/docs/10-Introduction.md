@@ -16,31 +16,23 @@ import Social from '@site/src/components/social';
 
 ![](../static/img/whispering-wide.jpeg)
 
-# Build a home assistant with OpenAI Whisper and Functions
+# Build a home assistant with OpenAI Whisper and OpenAI Functions
 
-OpenAI Whisper is a speech-to-text transcription library that uses the [OpenAI Whisper](https://openai.com/research/whisper) models. 
-
-The whisper model is available as a cloud [Speech to text API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI or you can run the Whisper model locally. This sample demonstrates how to run the Whisper model locally with the [openai-whisper](https://pypi.org/project/openai-whisper/) library to transcribe audio files.
+This sample demonstrates how you can build a simple home assistant with [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling). OpenAI Whisper is a powerful multilingual speech-to-text transcription model. OpenAI Functions extract structured data from unstructured prompt data, making it easier for your code to determine the next course of action.
 
 ## What is OpenAI Whisper?
 
-The OpenAI Whisper model is an Open Source speech-to-text transcription model that is trained on 680,000 hours of multilingual and multitask supervised data collected from the web. 
+The OpenAI Whisper model is an Open Source speech-to-text transcription model that is trained on 680,000 hours of multilingual and multitask supervised data collected from the web. The whisper model is available as a cloud [Speech to text API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI or you can run the Whisper model locally. This sample demonstrates how to run the Whisper model locally with the [openai-whisper](https://pypi.org/project/openai-whisper/) library to transcribe audio files.
 
-OpenAI describes Whisper as an[encoder-decoder transformer](https://kikaben.com/transformers-encoder-decoder/), a type of neural network that can use context gleaned from input data to learn associations that can then be translated into the model's output.
+<!-- OpenAI describes Whisper as an [encoder-decoder transformer](https://kikaben.com/transformers-encoder-decoder/), a type of neural network that can use context gleaned from input data to learn associations that can then be translated into the model's output. Quote from the [OpenAI Whisper](https://openai.com/research/whisper) webpage:
 
-Quotes from the [OpenAI Whisper](https://openai.com/research/whisper) webpage:
-
-> We’ve trained and are open-sourcing a neural net called Whisper that approaches human level robustness and accuracy on English speech recognition.
-
-> Whisper is an automatic speech recognition (ASR) system trained on 680,000 hours of multilingual and multitask supervised data collected from the web. We show that the use of such a large and diverse dataset leads to improved robustness to accents, background noise and technical language. Moreover, it enables transcription in multiple languages, as well as translation from those languages into English. We are open-sourcing models and inference code to serve as a foundation for building useful applications and for further research on robust speech processing.
+> We’ve trained and are open-sourcing a neural net called Whisper that approaches human level robustness and accuracy on English speech recognition. Whisper is an automatic speech recognition (ASR) system trained on 680,000 hours of multilingual and multitask supervised data collected from the web. We show that the use of such a large and diverse dataset leads to improved robustness to accents, background noise and technical language. Moreover, it enables transcription in multiple languages, as well as translation from those languages into English. We are open-sourcing models and inference code to serve as a foundation for building useful applications and for further research on robust speech processing. -->
 
 ## What are OpenAI Functions
 
-OpenAI Function is a way to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the model intelligently choose to output a JSON object containing arguments to call those functions. The Chat Completions API does not call the function; instead, the model generates JSON that you can use to call the function in your code.
+OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity. 
 
-It's important to note that the model does not call the function, it generates the arguments to call the function. The function is called by the client code - ie your code!
-
-You can read more about OpenAI Functions in the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
+It's important to note that the model doesn't magically call the function on your behalf, that's your codes job, you are returned a function name and arguments and it's up to your code to determine what to do with the data. You can read more about OpenAI Functions in the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
 
 ### OpenAI Function Examples
 
@@ -95,11 +87,6 @@ light_state = {
     }
 }
 ```
-
-The function definition along with the prompt is passed to the OpenAI Chat Completion API. The GPT model then attempts to populate a JSON object matching one of the function definition passed in. If there is a successful match, the chat completion API returns the function name and the JSON object/entity. 
-
-It's then up to your app to decide what to do with the returned data. Your app might be an agent that calls the function, or it might save the extracted entity to a database for later processing.
-
 
 ## Running OpenAI Whisper Sample
 
