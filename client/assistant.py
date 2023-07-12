@@ -7,22 +7,22 @@ import os
 import json
 import base64
 from os import path
+import threading
+import openai
 import PySimpleGUI as sg
 import requests
-import openai
-import threading
 import speech_recognition as sr
 
-
-e = threading.Event()
-window = None
-
-
-STOP_RECORDING = False
-
-bundle_dir = path.abspath(path.dirname(__file__))
-WHISPER_API_KEY = ""
+OPENAI_MODEL_NAME = "gpt-3.5-turbo-0613"
+OPENAI_MAX_TOKENS = 64
+WHISPER_MODEL_NAME = "tiny"
 WHISPER_API_KEY_NAME = 'Api-Key'
+
+
+window = None
+bundle_dir = path.abspath(path.dirname(__file__))
+e = threading.Event()
+
 
 light_state = {
     "name": "set_light_state",
@@ -118,9 +118,6 @@ openai_functions = [
     get_weather,
 ]
 
-device_names = ["washingmachine", "bedroomlights", "livingroomlights", "bedroomlight", "livingroomlight",
-                "frontdoor", "backdoor", "garagedoor"]
-
 
 def report_weather(function_call, function_arguments):
     '''This function is called when the assistant is asked about the weather.
@@ -146,7 +143,7 @@ def report_weather(function_call, function_arguments):
 
         # We call the OpenAI API again, this time providing the assistant with the weather details
         response_2 = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-0613",
+            model=OPENAI_MODEL_NAME,
             messages=[
                 {"role": "user", "content": f"What is the weather like in {location}?"},
                 {"role": "assistant", "content": None, "function_call": {
@@ -248,7 +245,7 @@ def get_openai_functions(text, last_assistant_message):
         ],
         functions=openai_functions,
         temperature=0.0,
-        max_tokens=128,
+        max_tokens=OPENAI_MAX_TOKENS,
     )
 
     # The assistant's response includes a function call. We extract the arguments from this function call
