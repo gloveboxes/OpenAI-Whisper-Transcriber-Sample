@@ -3,6 +3,8 @@
 
 # https://github.com/openai/openai-cookbook/blob/main/examples/How_to_call_functions_with_chat_models.ipynb
 
+import argparse
+import io
 import os
 import json
 import base64
@@ -111,8 +113,6 @@ get_weather = {
 
 openai_functions = [
     light_state,
-    # light_color,
-    # light_brightness,
     washing_machine_state,
     lock_state,
     get_weather,
@@ -187,10 +187,6 @@ definition_map = {"get_current_weather": get_weather, "set_light_state": light_s
 
 def record_audio(mic, recognizer):
     '''Record until silence'''
-    # with mic as source:
-    #     recognizer.adjust_for_ambient_noise(source)
-
-
 
     with mic as source:
 
@@ -259,6 +255,22 @@ def get_openai_functions(text, last_assistant_message):
 
     return content, function_name, arguments
 
+def transcribe(audio, recognizer):
+    '''Transcribes the audio.'''
+
+    if TRANSCRIBE_MODE == "local":
+        transcription = recognizer.recognize_whisper(audio, model="tiny.en")
+    elif TRANSCRIBE_MODE == "openai":
+        in_memory_file = io.BytesIO()
+        in_memory_file.write(audio.get_wav_data())
+        in_memory_file.seek(0)
+        in_memory_file.name = "microphone.wav"           
+        transcription = openai.Audio.transcribe( file=in_memory_file, model="whisper-1", api_key=OPENAI_API_KEY)["text"]
+    elif TRANSCRIBE_MODE == "gpu":
+        transcription = transcribe_audio_wav(audio.get_wav_data())
+
+    return transcription
+
 
 def state_machine(mic_index, energy_threshold):
     '''This is the pipeline thread.'''
@@ -310,10 +322,7 @@ def state_machine(mic_index, energy_threshold):
             # transcribe audio state
             elif state_counter == 1:
 
-                transcription = recognizer.recognize_whisper(audio, model="tiny.en")
-                # transcription = transcribe_audio_wav(audio.get_wav_data())
-                print(transcription)
-
+                transcription = transcribe(audio, recognizer)
                 state_counter += 1
 
                 previous_transcription = transcription + "\n" + \
@@ -384,6 +393,8 @@ def state_machine(mic_index, energy_threshold):
         except Exception as exception:
             print(exception)
             max_loop = 99
+
+
 
 
 
@@ -485,5 +496,12 @@ if __name__ == "__main__":
     WHISPER_API_KEY = os.environ['WHISPER_API_KEY']
     WHISPER_ENDPOINT = os.environ['WHISPER_ENDPOINT']
     WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
+
+    # get mode from the command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--mode", help="Mode of operation", default="local")
+    args = parser.parse_args()
+
+    TRANSCRIBE_MODE = args.mode
 
     main()
