@@ -63,26 +63,34 @@ Follow the instructions for your operating system.
 
 5. Activate the Python virtual environment.
 
+    on Windows
+
+    ```pwsh
+    .\.whisper-venv\Scripts\activate
+    ```
+
+    on macOS and Linux
+
     ```bash
     source .whisper-venv/bin/activate
     ```
 
-6. Install the required Python libraries.
+7. Install the required Python libraries.
 
     ```bash
     pip3 install -r requirements.txt
     ```
 
-7. Review the following chart is taken from the [OpenAI Whisper Project Description](https://pypi.org/project/openai-whisper/) page and select the model that will fit in the RAM of your computer. At the time of writing, Whisper multilingual models include `tiny`, `small`, `medium`, and `large`, and English-only models include `tiny.en`, `small.en`, and `medium.en`.
+8. Review the following chart is taken from the [OpenAI Whisper Project Description](https://pypi.org/project/openai-whisper/) page and select the model that will fit in the RAM of your computer. At the time of writing, Whisper multilingual models include `tiny`, `small`, `medium`, and `large`, and English-only models include `tiny.en`, `small.en`, and `medium.en`.
    ![](../media/whisper_model_selection.png)
 
-8.  Update the `server/config.json` file to set your desired Whisper model. For example, to use the `medium` model, set the `model` property to `medium`.
+9.  Update the `server/config.json` file to set your desired Whisper model. For example, to use the `medium` model, set the `model` property to `medium`.
 
     ```json
     { "model": "medium" }
     ```
 
-9.   Start the Whisper Transcriber Service. From the command line, run:
+10.   Start the Whisper Transcriber Service. From the command line, run:
 
         ```bash
         uvicorn main:app --port 5500 --host 0.0.0.0
@@ -96,7 +104,7 @@ Follow the instructions for your operating system.
         [2023-06-04 18:53:50.375565] Ready to transcribe audio files.
         ```
 
-10.  The `Whisper API Key` will be also be displayed. Save the `Whisper API Key` somewhere safe, you'll need the key to configure the Whisper client.
+11.  The `Whisper API Key` will be also be displayed. Save the `Whisper API Key` somewhere safe, you'll need the key to configure the Whisper client.
 
     ```text
     Whisper API Key: <key>
