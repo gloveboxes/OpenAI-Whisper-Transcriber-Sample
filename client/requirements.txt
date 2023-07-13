@@ -3,3 +3,5 @@ pyaudio
 openai
 SpeechRecognition
 openai_whisper
+PySimpleGUI
+soundfile
