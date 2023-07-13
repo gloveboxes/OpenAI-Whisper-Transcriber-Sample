@@ -30,63 +30,8 @@ The OpenAI Whisper model is an Open Source speech-to-text transcription model th
 
 ## What are OpenAI Functions
 
-OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity. 
+OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity.
 
-It's important to note that the model doesn't magically call the function on your behalf, that's your codes job, you are returned a function name and arguments and it's up to your code to determine what to do with the data. You can read more about OpenAI Functions in the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
-
-### OpenAI Function Examples
-
-Here are two examples of OpenAI Functions. Take a moment to review the following JSON OpenAI Function definitions, you'll see a function name, description, parameters and and a series of properties that describe the function and its schema. You can define and pass multiple function definitions to the OpenAI Chat Completion API.
-
-```json
-{
-    "name": "get_current_weather",
-    "description": "Get the current weather in a given location",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "location": {
-                "type": "string",
-                "description": "The city and state, e.g. San Francisco, CA"
-            },
-            "unit": {
-                "type": "string",
-                "enum": ["celsius", "fahrenheit"]
-            }
-        },
-        "required": ["location"]
-    }
-}
-```
-
-```json
-light_state = {
-    "name": "set_light_state",
-    "description": "Turn a light on or off and sets it to a given color and brightness",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "device": {
-                "type": "string",
-                "description": "The name of the light"
-            },
-            "state": {
-                "type": "string",
-                "enum": ["on", "off"]
-            },
-            "brightness": {
-                "type": "string",
-                "enum": ["low", "medium", "high"]
-            },
-            "color": {
-                "type": "string",
-                "enum": ["red", "white", "blue", "green", "yellow", "purple", "orange", "pink", "cyan", "magenta", "lime", "indigo", "teal", "olive", "brown", "black", "grey", "silver", "gold", "bronze", "platinum", "rainbow"]
-            }
-        },
-        "required": ["device"]
-    }
-}
-```
 
 ## Running OpenAI Whisper Sample
 
