@@ -1,11 +1,13 @@
 # Home Assistant
 
-
 ## Clone the repository
 
-```bash
-git clone https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample
-```
+1. Install Git from https://git-scm.com/downloads.
+2. Clone the repository:
+
+    ```bash
+    git clone https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample
+    ```
 
 ## Cloud API Keys
 
@@ -86,7 +88,7 @@ There are three modes to use Whisper speech to text transcriber. The default mod
 
 1. `local`: The Whisper speech to text transcription is done locally on the device. This is the default mode and free mode. The speed will depend on the hardware capabilities of your computer. The first time the Whisper speech to text transcriber is used, it will download the transcriber model from the internet. This will take a few minutes.
 2. `openai`: The Whisper speech to text transcription is done using the OpenAI API Audio service which maybe a lot faster that transcribing speech on your computer. This is a paid service, review [OpenAI Audio Model Pricing](https://openai.com/pricing/) for more information.
-3. `gpu`: You can run a Whisper REST endpoint on your own NVidia GPU. For more information, review the [Whisper REST API]().
+3. `gpu`: You can run a Whisper REST endpoint on your own NVidia GPU. For more information, review the [Whisper REST API](../Whisper-Server/Whisper-Server-Setup) docs.
 
 ## Run the home assistant app
 
