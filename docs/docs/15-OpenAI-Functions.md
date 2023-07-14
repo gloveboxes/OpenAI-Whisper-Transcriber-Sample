@@ -62,7 +62,7 @@ light_state = {
 
 This home assistant uses the following OpenAI Functions:
 
-- get_current_weather: for getting weather data from https://www.weatherapi.com/ and using to ground a GPT prompt.
+- get_current_weather: Weather data is from https://www.weatherapi.com/ and is used to ground a GPT prompts.
 - light_state: for controlling imaginary lights
 - washing_machine_state: for controlling imaginary washing machines
 - lock_state: for controlling imaginary locks
