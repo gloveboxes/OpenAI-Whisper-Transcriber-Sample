@@ -117,3 +117,6 @@ There are three modes to use Whisper speech to text transcriber. The default mod
     1. What's the weather in Seattle
     2. How can you help me
     3. Turn on the living room lights
+    4. Turn in the living room lights set the color to orange and brightness to dim.
+    5. Turn on the washing machine
+    6. Lock the front door
