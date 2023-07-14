@@ -1,5 +1,10 @@
 # Whisper Client Setup
 
+This sample also includes a client app that can be used to interact with the Whisper Transcriber Service.  The client app can be used to: 
+
+1. Transcribe audio files. The following file types are supported: avi ,mp3 ,mp4 ,mpeg ,mpga ,m4a ,wav ,webm.
+2. Transcribe audio from a microphone.
+
 The following document describes the ways to interact with the OpenAI Whisper Transcriber Service.
 
 1. The Whisper Transcriber Client app is the most capable.
