@@ -37,7 +37,7 @@ OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-
 There are two samples:
 
 1. [Home Assistant](Assistant) - A simple home assistant that can turn on and off lights, and set the temperature.
-2. [Transcribe with Whisper](Whisper-Client/Whisper-Client-Setup)
+2. [Transcribe with Whisper](Whisper-Client/Whisper-Client-Setup) - A sample that demonstrates how to transcribe audio files with the Whisper model.
 
 ## Running OpenAI Whisper Sample
 
