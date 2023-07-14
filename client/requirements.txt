@@ -5,3 +5,4 @@ SpeechRecognition
 openai_whisper
 PySimpleGUI
 soundfile
+python-dotenv
