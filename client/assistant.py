@@ -3,13 +3,13 @@
 
 # https://github.com/openai/openai-cookbook/blob/main/examples/How_to_call_functions_with_chat_models.ipynb
 
-import argparse
 import io
 import os
 import json
 import base64
 from os import path
 import threading
+from dotenv import load_dotenv
 import openai
 import PySimpleGUI as sg
 import requests
@@ -258,15 +258,15 @@ def get_openai_functions(text, last_assistant_message):
 def transcribe(audio, recognizer):
     '''Transcribes the audio.'''
 
-    if TRANSCRIBE_MODE == "local":
+    if WHISPER_MODE == "local":
         transcription = recognizer.recognize_whisper(audio, model="tiny.en")
-    elif TRANSCRIBE_MODE == "openai":
+    elif WHISPER_MODE == "openai":
         in_memory_file = io.BytesIO()
         in_memory_file.write(audio.get_wav_data())
         in_memory_file.seek(0)
         in_memory_file.name = "microphone.wav"           
         transcription = openai.Audio.transcribe( file=in_memory_file, model="whisper-1", api_key=OPENAI_API_KEY)["text"]
-    elif TRANSCRIBE_MODE == "gpu":
+    elif WHISPER_MODE == "gpu":
         transcription = transcribe_audio_wav(audio.get_wav_data())
 
     return transcription
@@ -481,16 +481,15 @@ def main():
 
 if __name__ == "__main__":
 
+    load_dotenv()
+
     OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+    WHISPER_MODE = os.environ['WHISPER_MODE']
     WHISPER_API_KEY = os.environ['WHISPER_API_KEY']
     WHISPER_ENDPOINT = os.environ['WHISPER_ENDPOINT']
     WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
 
-    # get mode from the command line
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--mode", help="Mode of operation", default="local")
-    args = parser.parse_args()
-
-    TRANSCRIBE_MODE = args.mode
+    if WHISPER_MODE == "":
+        WHISPER_MODE = "local"
 
     main()
