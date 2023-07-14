@@ -280,18 +280,10 @@ def state_machine(mic_index, energy_threshold):
     last_assistant_message = ""
 
     recognizer = sr.Recognizer()
-
-    # recognizer.pause_threshold = 0.6
     recognizer.dynamic_energy_threshold = True
     recognizer.energy_threshold = energy_threshold
 
-    print("Microphone index: ", mic_index)
     mic = sr.Microphone(mic_index)
-
-    # adjust the energy threshold for ambient noise
-    # with mic as source:
-    #     recognizer.adjust_for_ambient_noise(source,duration=5)
-        # audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
 
     while 1:
         try:
@@ -393,9 +385,6 @@ def state_machine(mic_index, energy_threshold):
         except Exception as exception:
             print(exception)
             max_loop = 99
-
-
-
 
 
 def main():
