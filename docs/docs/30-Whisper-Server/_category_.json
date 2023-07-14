@@ -1,5 +1,5 @@
 {
-    "label": "Whisper Endpoint",
+    "label": "Create a Whisper Endpoint",
     "link": {
         "type": "generated-index",
         "description": "Learn how to deploy your own Whisper speech to text REST endpoint."

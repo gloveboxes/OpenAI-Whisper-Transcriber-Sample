@@ -15,4 +15,3 @@ The following document describes the ways to interact with the OpenAI Whisper Tr
 The following section describes how to install the Whisper Transcriber Client app on the same computer as the Whisper Transcriber Service.
 
 ![](../media/architecture.png)
-

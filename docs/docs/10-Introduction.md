@@ -32,12 +32,18 @@ The OpenAI Whisper model is an Open Source speech-to-text transcription model th
 
 OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity.
 
+## Running the Samples
+
+There are two samples:
+
+1. [Home Assistant](Assistant) - A simple home assistant that can turn on and off lights, and set the temperature.
+2. [Transcribe with Whisper](Whisper-Client/Whisper-Client-Setup)
 
 ## Running OpenAI Whisper Sample
 
 The Whisper model runs best on an NVidia GPU from WSL2 or Linux. The sample code will run on a CPU, both Intel and Apple Silicon are supported, but transcription will be slower. If you are running the model on a CPU then it's recommended to use smaller Whisper models for the transcriptions.
 
-## Solution Architecture
+<!-- ## Solution Architecture
 
 The solution is divided into two parts:
 
@@ -48,4 +54,4 @@ The solution is divided into two parts:
 
 The advantage of this architecture is the model is loaded once by the Whisper service, a relatively time-consuming process, and then called multiple times by the Whisper clients.
 
-![](media/architecture.png)
+![](media/architecture.png) -->

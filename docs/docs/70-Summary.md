@@ -1,3 +1,3 @@
 # Finished
 
-Congratulations! You have successfully installed and run the Whisper Transcriber Service Sample 🎉
+Congratulations! You have successfully installed and run the Home Assistant and Whisper Transcriber Samples 🎉

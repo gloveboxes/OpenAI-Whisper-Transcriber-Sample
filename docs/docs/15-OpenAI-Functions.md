@@ -1,4 +1,4 @@
-# OpenAI Functions
+# Intro to OpenAI Functions
 
 This sample uses OpenAI Functions extensive to power the home assistant. OpenAI Functions enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity.
 

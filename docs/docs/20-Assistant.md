@@ -1,4 +1,4 @@
-# Home Assistant
+# Start the Home Assistant
 
 ## Clone the repository
 

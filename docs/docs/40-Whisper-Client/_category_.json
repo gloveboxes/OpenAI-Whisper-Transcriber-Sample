@@ -1,5 +1,5 @@
 {
-    "label": "Whisper Transcriber",
+    "label": "Transcribe with Whisper",
     "link": {
         "type": "generated-index",
         "description": "Learn how to run the Whisper speech to text Transcriber."
