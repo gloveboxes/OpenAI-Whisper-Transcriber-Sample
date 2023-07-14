@@ -38,15 +38,23 @@ Create a Weather API account and get an API key.
 
 ## Install prerequisites
 
-1. Install Python version 3.8 ~ 3.10. The [Whisper library](https://pypi.org/project/openai-whisper/) is supported on Python 3.8 to 3.10.
+1. Install [Python](https://www.python.org/downloads) version 3.8 ~ 3.10. The [Whisper library](https://pypi.org/project/openai-whisper/) is supported on Python 3.8 to 3.10.
 1. Install the required Python packages:
 1. Create a Python virtual environment:
 
-    ```bash
+    Windows
+
+    ```pwsh
     python -m venv .assistant
     ```
 
-1. Activate the Python virtual environment:
+    Linux and macOS
+
+    ```bash
+    python3 -m venv .assistant
+    ```
+
+2. Activate the Python virtual environment:
 
     Windows
 
@@ -60,13 +68,13 @@ Create a Weather API account and get an API key.
     source .assistant/bin/activate
     ```
 
-1. Install the required Python packages:
+3. Install the required Python packages:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-1. On Windows, by default, the `requirements.txt` file will install the CPU version of PyTorch. If you have an NVidia GPU, you can install the CUDA accelerated version of PyTorch.
+4. On Windows, by default, the `requirements.txt` file will install the CPU version of PyTorch. If you have an NVidia GPU, you can install the CUDA accelerated version of PyTorch.
 
     1. First uninstall the CPU version of PyTorch:
 
