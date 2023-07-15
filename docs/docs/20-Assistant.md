@@ -1,5 +1,13 @@
 # Start the Home Assistant
 
+## Platform support
+
+The Home Assistant app has been tested on the following platforms:
+
+1. Windows 11 (latest updates)
+2. macOS Ventura (latest updates)
+3. Ubuntu 20.04 (latest updates)
+
 ## Clone the repository
 
 1. Install Git from https://git-scm.com/downloads.
@@ -55,7 +63,19 @@ Create a Weather API account and get an API key.
 ## Install prerequisites
 
 1. Install [Python](https://www.python.org/downloads) version 3.8 ~ 3.10. The [Whisper library](https://pypi.org/project/openai-whisper/) is supported on Python 3.8 to 3.10.
-1. Install the required Python packages:
+
+## Install OS Dependencies
+
+### Linux
+
+```bash
+sudo apt-get install portaudio19-dev python3-pyaudio
+```
+
+
+## Install the required Python packages:
+
+1. From the command line, change to the `client` folder of the repo you cloned.
 1. Create a Python virtual environment:
 
     Windows
