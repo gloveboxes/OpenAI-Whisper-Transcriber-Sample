@@ -233,8 +233,10 @@ def get_openai_functions(text, last_assistant_message):
     response_1 = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0613",
         messages=[
-            {"role": "system", "content": "You are a home automation assistant and you can only help with home automation. Device types limited to those listed in functions. Ask for the device name. Device names have no spaces."},
+            {"role": "system", "content": "You are a home automation assistant and you can only help with home automation."},
             {"role": "system", "content": "Start all responses with 'I'm a home automation assistant'."},
+            {"role": "system", "content": "Device types limited to those listed in functions. Ask for the device name unsure. Device names have no spaces."},
+            {"role": "system", "content": "Only use the functions you have been provided with."},
             {"role": "assistant", "content": last_assistant_message},
             {"role": "user", "content": text},
         ],
