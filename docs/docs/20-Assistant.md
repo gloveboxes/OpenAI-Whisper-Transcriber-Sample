@@ -69,7 +69,7 @@ Create a Weather API account and get an API key.
 ### Linux
 
 ```bash
-sudo apt-get install portaudio19-dev python3-pyaudio
+sudo apt-get install portaudio19-dev python3-pyaudio python3-tk
 ```
 
 
