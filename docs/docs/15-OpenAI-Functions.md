@@ -74,8 +74,7 @@ This home assistant uses the following OpenAI Functions:
 When the `openai.ChatCompletion.create` function is called, 
 
 - The `openai_functions` variable is passed to the `functions` parameter. The `functions` parameter is a list of OpenAI Function definitions. 
-- The `messages` parameter is a list of messages that are passed to the GPT model. The `messages` parameter contains the role, and content of the message. 
-- The `role` parameter is either `system`, `user`, or `assistant`. The `content` parameter is the message text. 
+- The `messages` parameter is a list of messages that are passed to the GPT model. The `messages` parameter contains the role, and content of the message. The `role` parameter is either `system`, `user`, or `assistant`. The `content` parameter is the message text. 
 - The `temperature` parameter is the temperature of the GPT model. 
 - The `max_tokens` parameter is the maximum number of tokens to return.
 
