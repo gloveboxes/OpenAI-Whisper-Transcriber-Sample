@@ -46,8 +46,8 @@ Next you will need to create accounts and get API keys for the cloud services. T
 
 Create an OpenAI account and get an API key.
 
-1. Sign up for an OpenAI account at https://platform.openai.com.
-2. Create an API key at https://platform.openai.com/account/api-keys.
+1. Sign up for an [OpenAI account](https://platform.openai.com).
+2. Create an [OpenAI API key](https://platform.openai.com/account/api-keys).
 3. Update the OPENAI_API_KEY key in the `.env` file with the API key.
 4. Save the updated `.env` file.
 
