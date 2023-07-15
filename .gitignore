@@ -1,3 +1,4 @@
 build
 client/whisper_gui.spec
 client/config.json
+.assistant
