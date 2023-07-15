@@ -80,11 +80,6 @@ When the `openai.ChatCompletion.create` function is called,
 - The `max_tokens` parameter is the maximum number of tokens to return.
 
 
-The `openai.ChatCompletion.create` function returns a `response` object. 
-- The `response` object contains the `choices` object. 
-- The `choices` object contains the `text` and `index` of the response. 
-- If a function is matched, a `function_call`` object is returned. The `function_call` object contains the `function` name and `arguments` object.
-
 To learn more about OpenAI Functions, see the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
 
 ```python
@@ -102,4 +97,20 @@ response_1 = openai.ChatCompletion.create(
     temperature=0.0,
     max_tokens=OPENAI_MAX_TOKENS,
 )
+```
+
+### Parsing the response
+
+The `openai.ChatCompletion.create` function returns a `response` object. 
+- The `response` object contains the `choices` object. 
+- The `choices` object contains the `message` of the response. 
+- If a function is matched, a `function_call` object is returned in the `message` object. The `function_call` object contains the function `name` and `arguments` object.
+
+```python
+result = response_1.get('choices')[0].get('message')
+content = result.get("content", "")
+
+if result.get("function_call"):
+    function_name = result.get("function_call").get("name")
+    arguments = json.loads(result.get("function_call").get("arguments"))
 ```
