@@ -242,7 +242,7 @@ def get_openai_functions(text, last_assistant_message):
         ],
         functions=openai_functions,
         temperature=0.0,
-        max_tokens=OPENAI_MAX_TOKENS,
+        max_tokens=OPENAI_MAX_TOKENS
     )
 
     # The assistant's response includes a function call. We extract the arguments from this function call
@@ -266,7 +266,7 @@ def transcribe(audio, recognizer):
         in_memory_file.write(audio.get_wav_data())
         in_memory_file.seek(0)
         in_memory_file.name = "microphone.wav"           
-        transcription = openai.Audio.transcribe( file=in_memory_file, model="whisper-1", api_key=OPENAI_API_KEY)["text"]
+        transcription = openai.Audio.transcribe( file=in_memory_file, model="whisper-1")["text"]
     elif WHISPER_MODE == "gpu":
         transcription = transcribe_audio_wav(audio.get_wav_data())
 
@@ -484,7 +484,7 @@ if __name__ == "__main__":
 
     load_dotenv()
 
-    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+    openai.api_key = os.environ['OPENAI_API_KEY']
     WHISPER_MODE = os.environ['WHISPER_MODE']
     WHISPER_MODE = "local" if os.environ['WHISPER_MODE'] == "" else os.environ['WHISPER_MODE']
     WHISPER_MODEL_NAME = "tiny" if os.environ['WHISPER_MODEL_NAME'] == "" else os.environ['WHISPER_MODEL_NAME']
