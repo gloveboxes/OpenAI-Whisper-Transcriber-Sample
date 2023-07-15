@@ -74,12 +74,14 @@ This home assistant uses the following OpenAI Functions:
 When the `openai.ChatCompletion.create` function is called, 
 
 - The `openai_functions` variable is passed to the `functions` parameter. The `functions` parameter is a list of OpenAI Function definitions. 
-- The `messages` parameter is a list of messages that are passed to the GPT model. The `messages` parameter contains the role, and content of the message. The `role` parameter is either `system`, `user`, or `assistant`. The `content` parameter is the message text. 
+- The `messages` parameter is a list of messages that are passed to the GPT model. The `messages` parameter contains the role, and content of the message. 
+- The `role` parameter is either `system`, `user`, or `assistant`. The `content` parameter is the message text. 
 - The `temperature` parameter is the temperature of the GPT model. 
 - The `max_tokens` parameter is the maximum number of tokens to return.
 
 
-The `openai.ChatCompletion.create` function returns a `response` object. - The `response` object contains the `choices` object. 
+The `openai.ChatCompletion.create` function returns a `response` object. 
+- The `response` object contains the `choices` object. 
 - The `choices` object contains the `text` and `index` of the response. 
 - If a function is matched, a `function_call`` object is returned. The `function_call` object contains the `function` name and `arguments` object.
 
@@ -89,8 +91,10 @@ To learn more about OpenAI Functions, see the [OpenAI Functions documentation](h
 response_1 = openai.ChatCompletion.create(
     model="gpt-3.5-turbo-0613",
     messages=[
-        {"role": "system", "content": "You are a home automation assistant and you can only help with home automation. Device types limited to those listed in functions. Ask for the device name. Device names have no spaces."},
+        {"role": "system", "content": "You are a home automation assistant and you can only help with home automation."},
         {"role": "system", "content": "Start all responses with 'I'm a home automation assistant'."},
+        {"role": "system", "content": "Device types limited to those listed in functions. Ask for the device name unsure. Device names have no spaces."},
+        {"role": "system", "content": "Only use the functions you have been provided with."},
         {"role": "assistant", "content": last_assistant_message},
         {"role": "user", "content": text},
     ],
