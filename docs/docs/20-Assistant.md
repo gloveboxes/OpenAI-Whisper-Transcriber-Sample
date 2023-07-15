@@ -76,7 +76,12 @@ sudo apt-get install portaudio19-dev python3-pyaudio
 ## Install the required Python packages:
 
 1. From the command line, change to the `client` folder of the repo you cloned.
-1. Create a Python virtual environment:
+
+    ```bash
+    cd OpenAI-Whisper-Transcriber-Sample/client
+    ```
+
+2. Create a Python virtual environment:
 
     Windows
 
@@ -90,7 +95,7 @@ sudo apt-get install portaudio19-dev python3-pyaudio
     python3 -m venv .assistant
     ```
 
-2. Activate the Python virtual environment:
+3. Activate the Python virtual environment:
 
     Windows
 
@@ -104,13 +109,13 @@ sudo apt-get install portaudio19-dev python3-pyaudio
     source .assistant/bin/activate
     ```
 
-3. Install the required Python packages:
+4. Install the required Python packages:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-4. On Windows, by default, the `requirements.txt` file will install the CPU version of PyTorch. If you have an NVidia GPU, you can install the CUDA accelerated version of PyTorch.
+5. On Windows, by default, the `requirements.txt` file will install the CPU version of PyTorch. If you have an NVidia GPU, you can install the CUDA accelerated version of PyTorch.
 
     1. First uninstall the CPU version of PyTorch:
 
