@@ -9,6 +9,22 @@
     git clone https://github.com/gloveboxes/OpenAI-Whisper-Transcriber-Sample
     ```
 
+## Environment file
+
+You'll find a `.env` file in the `client` folder of the repo you cloned. This file contains the configuration settings for the Home Assistant app.
+
+The following keys are defined in the `.env` file:
+
+| Key | Description |
+| --- | --- |
+| OPENAI_API_KEY | The OpenAI API key. |
+| WEATHER_API_KEY | The Weather API key. |
+| WHISPER_MODE | The Whisper speech to text transcriber mode. The default mode is `local`.  |
+| WHISPER_MODEL_NAME | The Whisper speech to text transcriber model name. The default model is `tiny`. This is only used when the `WHISPER_MODE` is set to `local`. See [Whisper models](#whisper-models) for more information. |
+| WHISPER_ENDPOINT | The Whisper speech to text transcriber endpoint. This is only used when the `WHISPER_MODE` is set to `gpu`. |
+| WHISPER_API_KEY | The Whisper speech to text transcriber API key. This is only used when the `WHISPER_MODE` is set to `gpu`. |
+
+
 ## Cloud API Keys
 
 The Home Assistant uses the following cloud services:
@@ -120,3 +136,16 @@ There are three modes to use Whisper speech to text transcriber. The default mod
     4. Turn in the living room lights set the color to orange and brightness to dim.
     5. Turn on the washing machine
     6. Lock the front door
+
+
+## Whisper Models
+
+The Whisper speech to text transcriber default model name is `tiny`. You can change the model name by updating the `WHISPER_MODEL_NAME` key in the `.env` file.
+
+The following table lists the available Whisper speech to text transcriber model names. The performance of the transcriber will depend on the model name you select and the hardware capabilities of your computer. 
+
+Remember, if you don't have the hardware to run the models with sufficient performance, you can use the OpenAI API Audio service by setting the `WHISPER_MODE` environment variable to `openai`. 
+
+The OpenAI API Audio service is a paid service, review [OpenAI Audio Model Pricing](https://openai.com/pricing/) for more information.
+
+![](media/whisper_model_selection.png)
