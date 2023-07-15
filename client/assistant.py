@@ -17,7 +17,6 @@ import speech_recognition as sr
 
 OPENAI_MODEL_NAME = "gpt-3.5-turbo-0613"
 OPENAI_MAX_TOKENS = 64
-WHISPER_MODEL_NAME = "tiny"
 WHISPER_API_KEY_NAME = 'Api-Key'
 
 
@@ -485,11 +484,10 @@ if __name__ == "__main__":
 
     OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
     WHISPER_MODE = os.environ['WHISPER_MODE']
+    WHISPER_MODE = "local" if os.environ['WHISPER_MODE'] == "" else os.environ['WHISPER_MODE']
+    WHISPER_MODEL_NAME = "tiny" if os.environ['WHISPER_MODEL_NAME'] == "" else os.environ['WHISPER_MODEL_NAME']
     WHISPER_API_KEY = os.environ['WHISPER_API_KEY']
     WHISPER_ENDPOINT = os.environ['WHISPER_ENDPOINT']
     WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
-
-    if WHISPER_MODE == "":
-        WHISPER_MODE = "local"
 
     main()
