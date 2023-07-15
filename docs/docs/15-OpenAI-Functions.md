@@ -69,9 +69,22 @@ This home assistant uses the following OpenAI Functions:
 
 ### How the code works
 
-The code defines the role prompts, a list of OpenAI Functions, the temperature, and maximum number of tokens. The `openai_functions` contains a list of all the OpenAI Function definitions. To learn more about OpenAI Functions, see the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
+<!-- The code defines the role prompts, a list of OpenAI Functions, the temperature, and maximum number of tokens. The `openai_functions`variable contains a list of all the OpenAI Function definitions.  -->
 
-```python
+When the `openai.ChatCompletion.create` function is called, 
+
+- The `openai_functions` variable is passed to the `functions` parameter. The `functions` parameter is a list of OpenAI Function definitions. 
+- The `messages` parameter is a list of messages that are passed to the GPT model. The `messages` parameter contains the role, and content of the message. 
+- The `role` parameter is either `system`, `user`, or `assistant`. The `content` parameter is the message text. 
+- The `temperature` parameter is the temperature of the GPT model. 
+- The `max_tokens` parameter is the maximum number of tokens to return.
+
+
+The `openai.ChatCompletion.create` function returns a `response` object. - The `response` object contains the `choices` object. 
+- The `choices` object contains the `text` and `index` of the response. 
+- If a function is matched, a `function_call`` object is returned. The `function_call` object contains the `function` name and `arguments` object.
+
+To learn more about OpenAI Functions, see the [OpenAI Functions documentation](https://platform.openai.com/docs/guides/gpt/function-calling).
 
 ```python
 response_1 = openai.ChatCompletion.create(
