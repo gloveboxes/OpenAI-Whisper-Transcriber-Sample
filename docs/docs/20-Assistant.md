@@ -4,8 +4,8 @@
 
 The Home Assistant app has been tested on the following platforms:
 
-1. Windows 11 (latest updates)
-2. macOS Ventura (latest updates)
+1. Windows 11 (x64, latest updates)
+2. macOS Ventura (Apple Silicon, latest updates)
 3. Ubuntu 20.04 (latest updates)
 
 ## Clone the repository
