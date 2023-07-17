@@ -52,7 +52,6 @@ light_state = {
     }
 }
 
-
 washing_machine_state = {
     "name": "set_washing_machine_state",
     "description": "Turn the clothes washing machine on or off",
@@ -91,6 +90,21 @@ lock_state = {
     }
 }
 
+whats_the_time = {
+    "name": "whats_the_time",
+    "description": "Get the current time for a given location",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "The city or timezone"
+            }
+        },
+        "required": ["location"]
+    }
+}
+
 get_weather = {
     "name": "get_current_weather",
     "description": "Get the current weather in a given location",
@@ -115,6 +129,7 @@ openai_functions = [
     washing_machine_state,
     lock_state,
     get_weather,
+    whats_the_time
 ]
 
 
@@ -175,13 +190,30 @@ def set_device_state(function_call, function_arguments):
 
     return response_2['choices'][0]['message']['content'], True
 
+def report_time(function_call, function_arguments):
+    '''This function is called when the assistant is asked about the time.'''
+    location = function_arguments['location']
+    response_2 = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0613",
+        messages=[
+            {"role": "user", "content": f"What is the time in {location}?"},
+            {"role": "assistant", "content": None, "function_call": {
+                "name": function_call, "arguments": json.dumps(function_arguments)}},
+            {"role": "function", "name": function_call,
+                "content": json.dumps(function_arguments)}
+        ],
+        functions=[definition_map[function_call]]
+    )
+
+    return response_2['choices'][0]['message']['content'], True
 
 function_map = {"get_current_weather": report_weather, "set_light_state": set_device_state,
                 "set_light_color": set_device_state, "set_light_brightness": set_device_state,
-                "set_washing_machine_state": set_device_state, "set_lock_state": set_device_state}
+                "set_washing_machine_state": set_device_state, "set_lock_state": set_device_state,
+                "whats_the_time": report_time}
 
 definition_map = {"get_current_weather": get_weather, "set_light_state": light_state, "set_washing_machine_state": washing_machine_state,
-                  "set_lock_state": lock_state}
+                  "set_lock_state": lock_state, "whats_the_time": whats_the_time}
 
 
 def record_audio(mic, recognizer):
@@ -484,12 +516,14 @@ if __name__ == "__main__":
 
     load_dotenv()
 
-    openai.api_key = os.environ['OPENAI_API_KEY']
+    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
     WHISPER_MODE = os.environ['WHISPER_MODE']
     WHISPER_MODE = "local" if os.environ['WHISPER_MODE'] == "" else os.environ['WHISPER_MODE']
     WHISPER_MODEL_NAME = "tiny" if os.environ['WHISPER_MODEL_NAME'] == "" else os.environ['WHISPER_MODEL_NAME']
     WHISPER_API_KEY = os.environ['WHISPER_API_KEY']
     WHISPER_ENDPOINT = os.environ['WHISPER_ENDPOINT']
     WEATHER_API_KEY = os.environ['WEATHER_API_KEY']
+
+    openai.api_key = OPENAI_API_KEY
 
     main()
