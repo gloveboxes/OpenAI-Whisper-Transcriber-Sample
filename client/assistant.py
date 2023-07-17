@@ -177,7 +177,7 @@ def set_device_state(function_call, function_arguments):
     '''Sets the state of a device'''
     device_name = function_arguments['device']
     response_2 = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0613",
+        model=OPENAI_MODEL_NAME,
         messages=[
             {"role": "user", "content": f"The {device_name} has been turned on or the color or brightness has been set?"},
             {"role": "assistant", "content": None, "function_call": {
@@ -194,7 +194,7 @@ def report_time(function_call, function_arguments):
     '''This function is called when the assistant is asked about the time.'''
     location = function_arguments['location']
     response_2 = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0613",
+        model=OPENAI_MODEL_NAME,
         messages=[
             {"role": "user", "content": f"What is the time in {location}?"},
             {"role": "assistant", "content": None, "function_call": {
