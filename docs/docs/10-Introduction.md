@@ -39,11 +39,11 @@ There are two samples:
 1. [Home Assistant](Assistant) - A simple home assistant that can turn on and off lights, and set the temperature.
 2. [Transcribe with Whisper](Whisper-Client/Whisper-Client-Setup) - A sample that demonstrates how to transcribe audio files with the Whisper model.
 
-## Running OpenAI Whisper Sample
+<!--  ## Running OpenAI Whisper Sample
 
 The Whisper model runs best on an NVidia GPU from WSL2 or Linux. The sample code will run on a CPU, both Intel and Apple Silicon are supported, but transcription will be slower. If you are running the model on a CPU then it's recommended to use smaller Whisper models for the transcriptions.
 
-<!-- ## Solution Architecture
+## Solution Architecture
 
 The solution is divided into two parts:
 
