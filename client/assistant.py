@@ -423,7 +423,7 @@ def main():
     '''Main function'''
     global window
 
-    button_font = ("Arial", 12)
+    button_font = ("Arial", 14)
 
     config_frame = [
         [
