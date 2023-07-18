@@ -25,7 +25,7 @@ bundle_dir = path.abspath(path.dirname(__file__))
 e = threading.Event()
 
 
-light_state = {
+set_light_state = {
     "name": "set_light_state",
     "description": "Turn a light on or off and sets it to a given color and brightness",
     "parameters": {
@@ -71,7 +71,7 @@ washing_machine_state = {
     }
 }
 
-lock_state = {
+set_lock_state = {
     "name": "set_lock_state",
     "description": "lock or unlock something",
     "parameters": {
@@ -90,7 +90,7 @@ lock_state = {
     }
 }
 
-whats_the_time = {
+get_the_time = {
     "name": "whats_the_time",
     "description": "Get the current time for a given location",
     "parameters": {
@@ -125,11 +125,11 @@ get_weather = {
 }
 
 openai_functions = [
-    light_state,
+    set_light_state,
     washing_machine_state,
-    lock_state,
+    set_lock_state,
     get_weather,
-    whats_the_time
+    get_the_time
 ]
 
 
@@ -162,8 +162,7 @@ def report_weather(function_call, function_arguments):
                 {"role": "user", "content": f"What is the weather like in {location}?"},
                 {"role": "assistant", "content": None, "function_call": {
                     "name": function_call, "arguments": json.dumps(function_arguments)}},
-                {"role": "function", "name": function_call,
-                    "content": json.dumps(weather_details)}
+                {"role": "function", "name": function_call, "content": json.dumps(weather_details)}
             ],
             functions=[get_weather]
         )
@@ -212,8 +211,8 @@ function_map = {"get_current_weather": report_weather, "set_light_state": set_de
                 "set_washing_machine_state": set_device_state, "set_lock_state": set_device_state,
                 "whats_the_time": report_time}
 
-definition_map = {"get_current_weather": get_weather, "set_light_state": light_state, "set_washing_machine_state": washing_machine_state,
-                  "set_lock_state": lock_state, "whats_the_time": whats_the_time}
+definition_map = {"get_current_weather": get_weather, "set_light_state": set_light_state, "set_washing_machine_state": washing_machine_state,
+                  "set_lock_state": set_lock_state, "whats_the_time": get_the_time}
 
 
 def record_audio(mic, recognizer):
