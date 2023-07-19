@@ -19,7 +19,9 @@ import Social from '@site/src/components/social';
 
 # Introduction to OpenAI Whisper and Functions
 
-This sample demonstrates how you can build a simple home assistant with [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling). OpenAI Whisper is a powerful multilingual speech-to-text transcription model. OpenAI Functions extract structured data from unstructured prompt data, making it easier for your code to determine the next course of action. Together, OpenAI Whisper and OpenAI Functions can be used to build a simple home assistant that you can interact with using natural language.
+This sample demonstrates how you can build a simple home assistant with [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling). 
+
+OpenAI Whisper is a powerful multilingual speech-to-text transcriber, and OpenAI Functions allow you to extract structured data from unstructured text. Together, these AI models bridge the messy unstructured world of natural language, both speech and written, with the structured world of software development. This bridge opens up exciting possibilities for UX designers and App developers enabling more accessible and intuitive app experiences.
 
 <iframe width="100%" height="420" src="https://www.youtube.com/embed/Io8cHdhRnYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
