@@ -7,6 +7,7 @@ import io
 import os
 import json
 import base64
+import datetime
 from os import path
 import threading
 from dotenv import load_dotenv
@@ -33,7 +34,8 @@ set_light_state = {
         "properties": {
             "device": {
                 "type": "string",
-                "description": "The name of the light"
+                "description": "The name of the light",
+                "enum": ["Lounge", "bedroom", "hallway", "balcony", "kitchen", "bathroom", "toilet", "garage", "garden", "frontdoor"]
             },
             "state": {
                 "type": "string",
@@ -191,10 +193,14 @@ def set_device_state(function_call, function_arguments):
 
 def report_time(function_call, function_arguments):
     '''This function is called when the assistant is asked about the time.'''
+    # get the current utc time formatted as a string
+    utc_time = datetime.datetime.utcnow().strftime("%H:%M:%S")
+
     location = function_arguments['location']
     response_2 = openai.ChatCompletion.create(
         model=OPENAI_MODEL_NAME,
         messages=[
+            {"role": "system", "content": f"You are a timezone assistant. The current utc time is {utc_time}"},
             {"role": "user", "content": f"What is the time in {location}?"},
             {"role": "assistant", "content": None, "function_call": {
                 "name": function_call, "arguments": json.dumps(function_arguments)}},
