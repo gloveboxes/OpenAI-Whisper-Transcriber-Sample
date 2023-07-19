@@ -39,7 +39,7 @@ OpenAI Function enables you to describe functions to [gpt-3.5-turbo-0613](https:
 
 ## Home Assistant Orchestration
 
-The home assistant is a simple orchestration of OpenAI Whisper and OpenAI Functions using a very simple state machine. The home assistant can turn on and off imaginary lights, get weather conditions to `ground` OpenAI prompts, and more. It's a simple example of how you can use OpenAI Whisper and OpenAI Functions to build a home assistant that you can extend.
+The home assistant is a simple orchestration of OpenAI Whisper and OpenAI Functions using a state machine. The home assistant can turn on and off imaginary lights, get weather conditions to `ground` OpenAI prompts, and more. It's an example of how you can use natural language with OpenAI Whisper and OpenAI Functions to build a home assistant that you can extend.
 
 The agent flow is:
 
