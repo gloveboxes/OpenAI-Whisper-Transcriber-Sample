@@ -21,6 +21,8 @@ import Social from '@site/src/components/social';
 
 This sample demonstrates how you can build a simple home assistant with [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI Functions](https://platform.openai.com/docs/guides/gpt/function-calling). OpenAI Whisper is a powerful multilingual speech-to-text transcription model. OpenAI Functions extract structured data from unstructured prompt data, making it easier for your code to determine the next course of action.
 
+<iframe width="100%" height="420" src="https://www.youtube.com/embed/Io8cHdhRnYA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## What is OpenAI Whisper?
 
 The OpenAI Whisper model is an Open Source speech-to-text transcription model that is trained on 680,000 hours of multilingual and multitask supervised data collected from the web. The whisper model is available as a cloud [Speech to text API](https://platform.openai.com/docs/guides/speech-to-text) from OpenAI or you can run the Whisper model locally. This sample demonstrates how to run the Whisper model locally with the [openai-whisper](https://pypi.org/project/openai-whisper/) library to transcribe audio files.
