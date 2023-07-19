@@ -33,7 +33,22 @@ The OpenAI Whisper model is an Open Source speech-to-text transcription model th
 
 ## What are OpenAI Functions
 
-OpenAI Function enables you to describe functions to gpt-3.5-turbo-0613 and gpt-4-0613 models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity.
+OpenAI Function enables you to describe functions to [gpt-3.5-turbo-0613](https://platform.openai.com/docs/models/gpt-3-5) and [gpt-4-0613](https://platform.openai.com/docs/models/gpt-4) models and later, and have the GPT model intelligently select which function (if any) best matches the data in the prompt. The function definitions along with the prompt are passed to the OpenAI Chat Completion API. The GPT model then determines which function best matches the prompt and populates a JSON object using the function JSON schema and prompt data. If there is a successful match, the chat completion API returns the function name and the JSON object/entity.
+
+## Home Assistant Orchestration
+
+The home assistant is a simple orchestration of OpenAI Whisper and OpenAI Functions using a very simple state machine. The home assistant can turn on and off imaginary lights, get weather conditions to `ground` OpenAI prompts, and more. It's a simple example of how you can use OpenAI Whisper and OpenAI Functions to build a home assistant that you can extend.
+
+The agent flow is:
+
+1. Record speech
+2. Transcribe speech to text with OpenAI Whisper
+3. Call OpenAI Chat Completion API with the transcribed text and function definitions to extract a function name and arguments.
+4. Run code for the function and pass arguments.
+5. Clean up
+6. rinse and repeat
+
+![](media/state-machine.png)
 
 ## Running the Samples
 
