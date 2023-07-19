@@ -46,7 +46,7 @@ The agent flow is:
 3. Call OpenAI Chat Completion API with the transcribed text and function definitions to extract a function name and arguments.
 4. Run code for the function and pass arguments.
 5. Clean up
-6. rinse and repeat
+6. Rinse and repeat
 
 ![](media/state-machine.png)
 
